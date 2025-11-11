@@ -12,6 +12,8 @@ use App\Livewire\Settings\Password;
 use App\Livewire\Settings\TwoFactor;
 use App\Livewire\AnnouncementManager;
 use App\Livewire\Settings\Appearance;
+use App\Livewire\MyReports;
+use App\Livewire\ModeratorReports;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -55,4 +57,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('announcements', AnnouncementManager::class)
         ->name('announcements')
         ->can('is-keamanan-superadmin');
+
+    Route::get('report', MyReports::class)->name('reportMhs')->can('is-mahasiswa');
+    Route::get('reportManager', ModeratorReports::class)->name('reportManager')->can('is-keamanan-superadmin');
 });

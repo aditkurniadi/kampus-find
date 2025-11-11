@@ -27,12 +27,19 @@
                         :current="request()->routeIs('foundItems')" wire:navigate>{{ __('Barang Managemet') }}
                     </flux:navlist.item>
 
+                    <flux:navlist.item icon="inbox-stack" class="mt-2" :href="route('reportManager')"
+                        :current="request()->routeIs('reportManager')" wire:navigate>{{ __('Laporan Barang Manager') }}
+                    </flux:navlist.item>
+
                     <flux:navlist.item icon="inbox-stack" class="mt-2" :href="route('announcements')"
                         :current="request()->routeIs('announcements')" wire:navigate>{{ __('Announcements Manager') }}
                     </flux:navlist.item>
                 @endcan
 
                 @can('is-mahasiswa')
+                    <flux:navlist.item icon="inbox-stack" class="mt-2" :href="route('reportMhs')"
+                        :current="request()->routeIs('reportMhs')" wire:navigate>{{ __('Laporan Saya') }}
+                    </flux:navlist.item>
                 @endcan
 
 

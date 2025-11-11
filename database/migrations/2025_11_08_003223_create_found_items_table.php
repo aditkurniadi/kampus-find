@@ -20,7 +20,9 @@ return new class extends Migration
             $table->string('image')->nullable(); // Dibuat nullable() sesuai skema
 
             // Menentukan status dengan nilai default 'available'
-            $table->enum('status', ['available', 'selesai', 'pending'])->default('available');
+            $table->enum('status', ['available', 'selesai', 'pending', 'rejected'])->default('available');
+
+            $table->text('rejection_reason')->nullable();
 
             // Relasi ke tabel users
             $table->foreignId('user_id')
