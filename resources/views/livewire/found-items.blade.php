@@ -136,6 +136,26 @@
                                 </label>
                             </div>
                         </li>
+                        <!-- Opsi Pending -->
+                        <li>
+                            <div class="flex items-center p-2 rounded-sm hover:bg-gray-100 dark:hover:bg-gray-600">
+                                <input wire:model.live="statusFilter" id="filter-status-pending" type="radio"
+                                    value="pending" name="statusFilter" class="w-4 h-4 text-blue-600 ...">
+                                <label for="filter-status-pending"
+                                    class="w-full ms-2 text-sm font-medium text-gray-900 rounded-sm dark:text-gray-300">Pending</svg>
+                                </label>
+                            </div>
+                        </li>
+                        <!-- Opsi Rejected -->
+                        <li>
+                            <div class="flex items-center p-2 rounded-sm hover:bg-gray-100 dark:hover:bg-gray-600">
+                                <input wire:model.live="statusFilter" id="filter-status-rejected" type="radio"
+                                    value="rejected" name="statusFilter" class="w-4 h-4 text-blue-600 ...">
+                                <label for="filter-status-rejected"
+                                    class="w-full ms-2 text-sm font-medium text-gray-900 rounded-sm dark:text-gray-300">Ditolak</svg>
+                                </label>
+                            </div>
+                        </li>
                         <!-- Opsi Selesai -->
                         <li>
                             <div class="flex items-center p-2 rounded-sm hover:bg-gray-100 dark:hover:bg-gray-600">

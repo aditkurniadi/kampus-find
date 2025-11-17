@@ -3,9 +3,7 @@
         Moderasi Laporan - {{ config('app.name') }}
     </x-slot:title>
 
-    {{-- BAR ATAS (HANYA SEARCH) --}}
     <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
-
         <div>
             <label for="table-search" class="sr-only">Search</label>
             <div class="relative">
@@ -70,16 +68,14 @@
                         <td class="px-6 py-4 text-gray-900 dark:text-white">
                             <div>{{ $report->location_found }}</div>
                             <div class="text-gray-500 dark:text-gray-400">
-                                {{ $report->found_date?->isoFormat('D MMMM YYYY') ?? 'Tgl. Kosong' }}
+                                {{ $report->date_found?->isoFormat('D MMM YYYY') ?? 'Tgl. Kosong' }}
                             </div>
                         </td>
 
                         <td class="px-6 py-4">
                             <div class="flex items-center space-x-2">
 
-                                <button wire:click="approveReport({{ $report->id }})"
-                                    wire:confirm="Anda yakin ingin MENYETUJUI laporan '{{ $report->name }}' dan menampilkannya?"
-                                    type="button"
+                                <button wire:click="openApproveConfirm({{ $report->id }})" type="button"
                                     class="p-1 rounded-full text-green-600 hover:text-green-900 dark:text-green-500 dark:hover:text-green-700 hover:bg-green-100 dark:hover:bg-green-800/50"
                                     title="Setujui (Approve)">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
@@ -137,9 +133,6 @@
         @endif
     </div>
 
-    {{-- ================================= --}}
-    {{-- | MODAL REJECT (TOLAK) LAPORAN  | --}}
-    {{-- ================================= --}}
     @if ($showModalReject)
         <div
             class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-gray-900/50">
@@ -198,11 +191,6 @@
         </div>
     @endif
 
-
-    {{-- ================================= --}}
-    {{-- | MODAL DELETE (HAPUS) LAPORAN  | --}}
-    {{-- | (Menggunakan style found-items) | --}}
-    {{-- ================================= --}}
     @if ($showModalDelete)
         <div
             class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-gray-900/50">
@@ -246,6 +234,85 @@
                             </button>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    @if ($showModalApprove && $selectedItem)
+        <div
+            class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-gray-900/50">
+            <div class="relative w-full max-w-lg p-4"> <!-- Ukuran max-w-lg -->
+                <div class="relative rounded-lg bg-white shadow-sm dark:bg-gray-700">
+
+                    <!-- Modal Header -->
+                    <div
+                        class="flex items-center justify-between rounded-t border-b border-gray-200 p-4 dark:border-gray-600 md:p-5">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            Konfirmasi Setujui Laporan
+                        </h3>
+                        <button wire:click="closeModal" type="button"
+                            class="ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white">
+                            <svg class="h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+
+                    <!-- Modal Body -->
+                    <div class="p-4 md:p-5 space-y-4">
+                        <p class="text-gray-700 dark:text-gray-300">
+                            Anda akan menyetujui laporan ini dan menampilkannya secara publik.
+                        </p>
+
+                        <!-- Detail Card -->
+                        <div class="border rounded-lg p-3 dark:border-gray-600 bg-gray-50 dark:bg-gray-800">
+                            <div class="flex items-center space-x-3">
+                                <img src="{{ asset('storage/' . $selectedItem->image) }}"
+                                    alt="{{ $selectedItem->name }}"
+                                    class="w-16 h-16 rounded-lg object-cover flex-shrink-0">
+                                <div>
+                                    <h4 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                        {{ $selectedItem->name }}</h4>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">
+                                        Oleh: {{ $selectedItem->user->name ?? 'N/A' }}
+                                    </p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                                        Lokasi: {{ $selectedItem->location_found }} <br>
+                                        Tgl: {{ $selectedItem->found_date?->isoFormat('D MMMM YYYY') ?? 'N/A' }}
+                                    </p>
+                                </div>
+                            </div>
+                            <p class="mt-3 text-sm text-gray-700 dark:text-gray-300">
+                                {{ $selectedItem->description }}
+                            </p>
+                        </div>
+
+                        <p class="text-sm text-yellow-600 dark:text-yellow-400">
+                            Pastikan data sudah benar sebelum konfirmasi.
+                        </p>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="mt-6 flex justify-end space-x-2 p-4 border-t dark:border-gray-600">
+                        <button wire:click="closeModal" type="button"
+                            class="rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-900 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-600">
+                            Keluar
+                        </button>
+                        <button wire:click="confirmApprove" type="button"
+                            class="rounded-lg bg-green-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-900">
+                            <span wire:loading.remove wire:target='confirmApprove'>
+                                Ya, Konfirmasi Accept
+                            </span>
+                            <span wire:loading wire:target='confirmApprove'>
+                                Memproses...
+                            </span>
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </div>

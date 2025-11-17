@@ -16,10 +16,12 @@ class ModeratorReports extends Component
     public $search = '';
     public $showModalDelete = false;
     public $showModalReject = false;
+    public $showModalApprove = false;
 
     public $itemId;
     public $name;
     public $rejectionReason = '';
+    public $selectedItem = null;
 
     protected $paginationTheme = 'tailwind';
 
@@ -32,10 +34,49 @@ class ModeratorReports extends Component
     {
         $this->showModalDelete = false;
         $this->showModalReject = false;
+        $this->showModalApprove = false;
         $this->itemId = null;
         $this->name = '';
         $this->rejectionReason = '';
+        $this->selectedItem = null;
         $this->resetErrorBag(); // Menghapus pesan error validasi
+    }
+
+    public function openApproveConfirm($id)
+    {
+        try {
+            // Ambil data lengkap dengan relasi untuk ditampilkan di modal
+            $this->selectedItem = found_items::with('user', 'category')->findOrFail($id);
+            $this->itemId = $id; // Simpan ID untuk dieksekusi
+            $this->showModalApprove = true;
+        } catch (\Exception $e) {
+            $this->dispatch('show-toast', type: 'warning', message: 'Data tidak ditemukan!');
+        }
+    }
+
+    /**
+     * [BARU] Fungsi yang dipanggil tombol 'Konfirmasi' di modal approve
+     */
+    public function confirmApprove()
+    {
+        if (!$this->itemId) return; // Keamanan jika ID tidak ada
+
+        try {
+            $item = found_items::findOrFail($this->itemId);
+
+            // Setujui dan catat siapa admin yang menangani
+            $item->update([
+                'status' => 'available',
+                'handled_by_user_id' => Auth::id(),
+                'rejection_reason' => 'Terima kasih atas laporan anda!'
+            ]);
+
+            $this->dispatch('show-toast', type: 'success', message: 'Laporan "' . $item->name . '" telah disetujui.');
+            $this->closeModal(); // Tutup semua modal
+
+        } catch (\Exception $e) {
+            $this->dispatch('show-toast', type: 'danger', message: 'Gagal menyetujui laporan.');
+        }
     }
 
     public function approveReport($id)
