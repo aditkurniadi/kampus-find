@@ -239,6 +239,8 @@ class FoundItems extends Component
         return match ($this->statusFilter) {
             'available' => 'Tersedia',
             'selesai' => 'Selesai',
+            'pending' => 'Pending',
+            'rejected' => 'Rejected',
             default => 'all',
         };
     }

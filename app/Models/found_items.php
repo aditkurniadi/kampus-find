@@ -16,8 +16,10 @@ class found_items extends Model
         'date_found',
         'image',
         'status',
+        'rejection_reason',
         'user_id',
         'category_id',
+        'handled_by_user_id'
     ];
 
     protected $casts = [
@@ -32,5 +34,10 @@ class found_items extends Model
     public function category()
     {
         return $this->belongsTo(categories::class);
+    }
+
+    public function handler()
+    {
+        return $this->belongsTo(User::class, 'handled_by_user_id');
     }
 }

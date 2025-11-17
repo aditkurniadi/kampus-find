@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Kampus - Find</title>
-    {{-- @include('partials.head') --}}
+    @include('partials.head')
 </head>
 
 <body>
-    {{-- @include('partials.header') --}}
+    @include('partials.header')
     <div class="relative bg-white dark:bg-gray-900">
         <div class="mx-auto max-w-7xl lg:grid lg:grid-cols-12 lg:gap-x-8 lg:px-8">
             <div class="px-6 pt-10 pb-24 sm:pb-32 lg:col-span-7 lg:px-0 lg:pt-40 lg:pb-48 xl:col-span-6">
