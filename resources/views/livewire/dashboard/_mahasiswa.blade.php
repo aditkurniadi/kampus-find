@@ -3,202 +3,224 @@
         Dashboard Mahasiswa - {{ config('app.name') }}
     </x-slot:title>
 
-    <div class="flex h-full w-full flex-1 flex-col gap-6">
+    <div class="flex h-full w-full flex-1 flex-col gap-8">
 
-        {{-- ========================================== --}}
-        {{-- SECTION 1: STATISTIK KONTRIBUSI SAYA       --}}
-        {{-- ========================================== --}}
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-
-            {{-- KARTU 1: TOTAL PENEMUAN SAYA --}}
+            {{-- Card 1: Total Kontribusi --}}
             <div
-                class="relative flex flex-col rounded-xl border border-neutral-200 bg-white p-6 shadow-sm transition-all hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800">
-                <div class="flex items-center justify-between">
+                class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white p-6 shadow-sm transition-all hover:border-blue-300 hover:shadow-md dark:border-zinc-700 dark:bg-zinc-900">
+                <div
+                    class="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-blue-50 transition-all group-hover:scale-110 dark:bg-blue-900/10">
+                </div>
+                <div class="relative flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Kontribusi Saya</p>
-                        <p class="mt-2 text-3xl font-bold text-gray-900 dark:text-white">{{ $myTotalReports ?? 0 }}</p>
+                        <p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Total Kontribusi</p>
+                        <p class="mt-1 text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
+                            {{ $myTotalReports ?? 0 }}</p>
                     </div>
                     <div
-                        class="flex h-12 w-12 items-center justify-center rounded-full bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400">
-                        {{-- Icon Archive Box --}}
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3.75h3.75M12 11.25h-3.75m-6.75-3.75h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
-                        </svg>
+                        class="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400">
+                        <flux:icon name="archive-box" variant="mini" />
                     </div>
                 </div>
             </div>
 
-            {{-- KARTU 2: BELUM DIAMBIL (AVAILABLE) --}}
+            {{-- Card 2: Proses Pencarian --}}
             <div
-                class="relative flex flex-col rounded-xl border border-neutral-200 bg-white p-6 shadow-sm transition-all hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800">
-                <div class="flex items-center justify-between">
+                class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white p-6 shadow-sm transition-all hover:border-yellow-300 hover:shadow-md dark:border-zinc-700 dark:bg-zinc-900">
+                <div
+                    class="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-yellow-50 transition-all group-hover:scale-110 dark:bg-yellow-900/10">
+                </div>
+                <div class="relative flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Belum Diambil</p>
-                        <p class="mt-2 text-3xl font-bold text-gray-900 dark:text-white">{{ $myActiveReports ?? 0 }}</p>
+                        <p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Proses Pencarian</p>
+                        <p class="mt-1 text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
+                            {{ $myActiveReports ?? 0 }}</p>
                     </div>
                     <div
-                        class="flex h-12 w-12 items-center justify-center rounded-full bg-yellow-50 text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400">
-                        {{-- Icon Clock --}}
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
+                        class="flex h-10 w-10 items-center justify-center rounded-lg bg-yellow-100 text-yellow-600 dark:bg-yellow-500/20 dark:text-yellow-400">
+                        <flux:icon name="clock" variant="mini" />
                     </div>
                 </div>
             </div>
 
-            {{-- KARTU 3: TELAH KEMBALI (SOLVED) --}}
+            {{-- Card 3: Kasus Selesai --}}
             <div
-                class="relative flex flex-col rounded-xl border border-neutral-200 bg-white p-6 shadow-sm transition-all hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800">
-                <div class="flex items-center justify-between">
+                class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white p-6 shadow-sm transition-all hover:border-green-300 hover:shadow-md dark:border-zinc-700 dark:bg-zinc-900">
+                <div
+                    class="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-green-50 transition-all group-hover:scale-110 dark:bg-green-900/10">
+                </div>
+                <div class="relative flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Telah Kembali</p>
-                        <p class="mt-2 text-3xl font-bold text-gray-900 dark:text-white">{{ $mySolvedReports ?? 0 }}</p>
+                        <p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Kasus Selesai</p>
+                        <p class="mt-1 text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
+                            {{ $mySolvedReports ?? 0 }}</p>
                     </div>
                     <div
-                        class="flex h-12 w-12 items-center justify-center rounded-full bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-400">
-                        {{-- Icon Check Badge --}}
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
+                        class="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 text-green-600 dark:bg-green-500/20 dark:text-green-400">
+                        <flux:icon name="check-circle" variant="mini" />
                     </div>
                 </div>
             </div>
-
         </div>
 
         {{-- ========================================== --}}
-        {{-- SECTION 2: GRID UTAMA (KIRI: 2/3, KANAN: 1/3) --}}
+        {{-- SECTION 3: MAIN CONTENT (GRID) --}}
         {{-- ========================================== --}}
-        <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
 
-            {{-- KOLOM KIRI (LEBAR): CTA & TABEL --}}
-            <div class="flex flex-col gap-6 lg:col-span-2">
+            {{-- KOLOM KIRI (LEBAR): CTA & LIST LAPORAN --}}
+            <div class="flex flex-col gap-8 lg:col-span-2">
 
                 {{-- Banner Ajakan (Call to Action) --}}
-                <div class="rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white shadow-md">
-                    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                        <div>
-                            <h3 class="text-xl font-bold">Menemukan Barang Tercecer?</h3>
-                            <p class="text-blue-100 text-sm mt-1">Bantu temanmu menemukannya dengan mengunggah foto dan
-                                info barang di sini.</p>
+                <div
+                    class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 px-8 py-8 text-white shadow-lg">
+                    <div
+                        class="relative z-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div class="max-w-md">
+                            <h3 class="text-2xl font-bold">Menemukan Barang?</h3>
+                            <p class="mt-2 text-indigo-100">
+                                Jangan biarkan barang tersebut hilang selamanya. Laporkan penemuanmu dan bantu temanmu
+                                menemukannya kembali.
+                            </p>
                         </div>
                         <flux:button href="{{ route('reportMhs') }}"
-                            class="bg-white text-blue-700 hover:bg-gray-50 border-none font-semibold shrink-0">
-                            Lapor Penemuan
+                            class="bg-white text-indigo-600 hover:bg-indigo-50 border-none font-bold shadow-md shrink-0">
+                            Buat Laporan Baru
                         </flux:button>
+                    </div>
+
+                    {{-- Decorative Shapes --}}
+                    <div class="absolute top-0 right-0 -mt-10 -mr-10 h-40 w-40 rounded-full bg-white/10 blur-2xl"></div>
+                    <div class="absolute bottom-0 left-0 -mb-10 -ml-10 h-40 w-40 rounded-full bg-white/10 blur-2xl">
                     </div>
                 </div>
 
-                {{-- Tabel Riwayat Penemuan --}}
-                {{-- TABEL 2: LAPORAN KEHILANGAN (FITUR CHAT ADA DI SINI) --}}
-                <div
-                    class="mt-6 overflow-hidden rounded-xl border border-red-200 bg-white shadow-sm dark:border-red-900/30 dark:bg-neutral-800">
-                    <div
-                        class="flex items-center justify-between border-b border-red-100 px-6 py-4 dark:border-red-900/30 bg-red-50 dark:bg-red-900/10">
-                        <h3 class="text-lg font-bold text-red-900 dark:text-red-100">Barang Hilang Saya</h3>
-                        <flux:button href="#" size="xs" variant="ghost" class="text-red-600">Lihat Semua
-                        </flux:button>
+                {{-- List Laporan Kehilangan (Modern List View) --}}
+                <div class="flex flex-col gap-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+                            <flux:icon name="exclamation-triangle" class="text-red-500" variant="mini" />
+                            Laporan Kehilangan Saya
+                        </h3>
+                        <a href="{{ route('myLostItems') }}"
+                            class="text-sm font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">
+                            Lihat Semua &rarr;
+                        </a>
                     </div>
 
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm text-gray-600 dark:text-gray-300">
-                            {{-- Header --}}
-                            <thead class="bg-red-50/50 text-xs font-medium uppercase text-red-500 dark:bg-red-900/20">
-                                <tr>
-                                    <th class="px-6 py-3">Barang</th>
-                                    <th class="px-6 py-3">Status</th>
-                                    <th class="px-6 py-3 text-center">Diskusi Admin</th> {{-- TOMBOL CHAT --}}
-                                </tr>
-                            </thead>
-                            {{-- Body --}}
-                            <tbody class="divide-y divide-red-100 dark:divide-red-900/30">
-                                @forelse($myLostReports ?? [] as $lost)
-                                    <tr class="transition hover:bg-red-50/30 dark:hover:bg-red-900/10">
-                                        <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">
+                    <div class="flex flex-col gap-3">
+                        @forelse($myLostReports ?? [] as $lost)
+                            {{-- Card Item --}}
+                            <div
+                                class="group flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition hover:border-indigo-300 hover:shadow-md dark:border-zinc-700 dark:bg-zinc-900 sm:flex-row sm:items-center sm:justify-between">
+
+                                {{-- Kiri: Info Barang --}}
+                                <div class="flex items-start gap-4">
+                                    {{-- Icon/Gambar Placeholder --}}
+                                    <div
+                                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-zinc-100 text-zinc-400 dark:bg-zinc-800">
+                                        <flux:icon name="photo" variant="mini" class="h-6 w-6" />
+                                    </div>
+
+                                    <div>
+                                        <h4
+                                            class="font-semibold text-zinc-900 dark:text-white group-hover:text-indigo-600 transition">
                                             {{ $lost->item_name }}
-                                        </td>
-                                        <td class="px-6 py-4">
+                                        </h4>
+                                        <div
+                                            class="mt-1 flex items-center gap-3 text-xs text-zinc-500 dark:text-zinc-400">
+                                            <span class="flex items-center gap-1">
+                                                <flux:icon name="calendar" class="h-3 w-3" />
+                                                {{ $lost->created_at->diffForHumans() }}
+                                            </span>
+
+                                            {{-- Status Badge --}}
                                             <span
-                                                class="inline-flex items-center rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-700 dark:bg-red-900/50 dark:text-red-300">
+                                                class="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium 
+                                                {{ $lost->status == 'ditemukan' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' }}">
                                                 {{ ucfirst($lost->status) }}
                                             </span>
-                                        </td>
+                                        </div>
+                                    </div>
+                                </div>
 
-                                        {{-- TOMBOL CHAT (Hanya di Tabel Ini) --}}
-                                        {{-- Di dalam loop foreach($myLostReports as $lost) --}}
-
-                                        <td class="px-6 py-4 text-center">
-
-                                            @if ($lost->messages_exists || $lost->status == 'ditemukan')
-                                                {{-- KONDISI 1: Admin sudah chat --}}
-                                                <div class="relative inline-block">
-                                                    <a href="{{ route('chat.room', $lost->id) }}"
-                                                        class="inline-flex items-center justify-center p-2 rounded-lg text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition border border-indigo-200 shadow-sm"
-                                                        title="Lanjutkan Diskusi">
-
-                                                        {{-- Icon Chat --}}
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                            class="size-5">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
-                                                        </svg>
-                                                        <span class="ml-2 text-xs font-bold">Balas</span>
-                                                    </a>
-
-                                                    {{-- Badge Merah (Unread) --}}
-                                                    @if ($lost->unread_count > 0)
-                                                        <span
-                                                            class="absolute top-0 right-0 -mt-1 -mr-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white ring-2 ring-white">
-                                                            {{ $lost->unread_count }}
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            @else
-                                                {{-- KONDISI 2: Belum ada chat dari admin --}}
+                                {{-- Kanan: Action Button (Chat) --}}
+                                <div class="flex shrink-0 items-center justify-end">
+                                    @if ($lost->messages_exists || $lost->status == 'ditemukan')
+                                        <a href="{{ route('chat.room', $lost->id) }}"
+                                            class="relative inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm ring-1 ring-inset ring-zinc-300 hover:bg-zinc-50 dark:bg-zinc-800 dark:text-zinc-200 dark:ring-zinc-600 dark:hover:bg-zinc-700">
+                                            <flux:icon name="chat-bubble-left-right" class="h-4 w-4 text-indigo-500" />
+                                            Diskusi
+                                            @if ($lost->unread_count > 0)
                                                 <span
-                                                    class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-gray-400 bg-gray-100 rounded-md cursor-help"
-                                                    title="Tombol chat akan muncul setelah Admin menghubungi Anda">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                        class="size-3">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                                    </svg>
-                                                    Menunggu Respon
+                                                    class="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] font-bold text-white shadow-sm">
+                                                    {{ $lost->unread_count }}
                                                 </span>
                                             @endif
-
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="3" class="px-6 py-8 text-center text-gray-500 italic">Tidak ada
-                                            laporan kehilangan.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                                        </a>
+                                    @else
+                                        <div class="flex items-center gap-1.5 rounded-lg bg-zinc-50 px-3 py-2 text-xs font-medium text-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-500 cursor-help"
+                                            title="Menunggu respon admin">
+                                            <flux:icon name="clock" class="h-3.5 w-3.5" />
+                                            Menunggu Admin
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        @empty
+                            {{-- Empty State --}}
+                            <div
+                                class="flex flex-col items-center justify-center rounded-xl border border-dashed border-zinc-300 bg-zinc-50 py-12 text-center dark:border-zinc-700 dark:bg-zinc-800/50">
+                                <div class="rounded-full bg-zinc-100 p-3 dark:bg-zinc-800">
+                                    <flux:icon name="check" class="h-6 w-6 text-zinc-400" />
+                                </div>
+                                <h3 class="mt-2 text-sm font-semibold text-zinc-900 dark:text-white">Aman terkendali
+                                </h3>
+                                <p class="text-sm text-zinc-500 dark:text-zinc-400">Belum ada barang yang Anda laporkan
+                                    hilang.</p>
+                            </div>
+                        @endforelse
                     </div>
                 </div>
+
             </div>
 
-            {{-- KOLOM KANAN (SEMPIT): PENGUMUMAN --}}
+            {{-- KOLOM KANAN (SIDEBAR): BANTUAN --}}
             <div class="flex flex-col gap-6">
 
-                {{-- Card Tambahan (Bisa diisi Hotline Keamanan) --}}
+                {{-- Card Bantuan (Tetap Dipertahankan) --}}
                 <div
-                    class="relative flex flex-col rounded-xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-700 dark:bg-neutral-800">
-                    <h3 class="text-sm font-bold text-gray-900 dark:text-white mb-2">Butuh Bantuan?</h3>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Jika Anda mengalami kendala saat melaporkan
-                        barang, hubungi pos keamanan.</p>
-                    <flux:button variant="outline" size="sm" class="w-full">Hubungi Keamanan</flux:button>
+                    class="relative overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50 p-5 dark:border-zinc-700 dark:bg-zinc-800">
+                    <div class="relative z-10">
+                        <div class="mb-3 flex items-center gap-2">
+                            <div
+                                class="flex h-8 w-8 items-center justify-center rounded-full bg-orange-100 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400">
+                                <flux:icon name="lifebuoy" variant="mini" />
+                            </div>
+                            <h3 class="font-bold text-zinc-900 dark:text-white">Butuh Bantuan?</h3>
+                        </div>
+
+                        <p class="text-sm text-zinc-500 dark:text-zinc-400">
+                            Jika Anda mengalami kendala teknis atau darurat keamanan terkait barang hilang.
+                        </p>
+
+                        <div class="mt-4 flex flex-col gap-2">
+                            <flux:button variant="outline" size="sm" icon="phone"
+                                class="w-full justify-start bg-white dark:bg-zinc-700 shadow-sm">
+                                Hotline Satpam
+                            </flux:button>
+                            <flux:button variant="ghost" size="sm" icon="envelope"
+                                class="w-full justify-start text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-700/50">
+                                Email Admin
+                            </flux:button>
+                        </div>
+                    </div>
+
+                    {{-- Hiasan Background --}}
+                    <div
+                        class="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-orange-500/5 blur-2xl dark:bg-orange-400/10">
+                    </div>
                 </div>
 
             </div>

@@ -15,60 +15,80 @@
 
         <flux:navlist variant="outline">
 
-            <flux:navlist.group :heading="__('Menu')" class="grid">
+            @can('is-all')
+                <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
+                    wire:navigate>
+                    {{ __('Dashboard') }}
+                </flux:navlist.item>
+            @endcan
 
-                @can('is-all')
-                    <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
-                        wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                @endcan
+            <flux:separator class="my-2" />
 
+            @can('is-keamanan-superadmin')
+                <flux:navlist.group :heading="__('Operasional')" class="grid">
+                    <flux:navlist.item icon="archive-box" :href="route('foundItems')"
+                        :current="request()->routeIs('foundItems')" wire:navigate>
+                        {{ __('Data Barang') }}
+                    </flux:navlist.item>
+
+                    <flux:navlist.item icon="clipboard-document-list" :href="route('reportManager')"
+                        :current="request()->routeIs('reportManager')" wire:navigate>
+                        {{ __('Laporan Masuk') }}
+                    </flux:navlist.item>
+
+                    <flux:navlist.item icon="exclamation-triangle" :href="route('admin.lostItems')"
+                        :current="request()->routeIs('admin.lostItems')" wire:navigate>
+                        {{ __('Laporan Kehilangan') }}
+                    </flux:navlist.item>
+
+                    <flux:navlist.item icon="megaphone" :href="route('announcements')"
+                        :current="request()->routeIs('announcements')" wire:navigate>
+                        {{ __('Pengumuman') }}
+                    </flux:navlist.item>
+                </flux:navlist.group>
+            @endcan
+
+            @can('is-mahasiswa')
                 @can('is-keamanan-superadmin')
-                    <flux:navlist.item icon="inbox-stack" class="mt-2" :href="route('foundItems')"
-                        :current="request()->routeIs('foundItems')" wire:navigate>{{ __('Barang Managemet') }}
-                    </flux:navlist.item>
-
-                    <flux:navlist.item icon="inbox-arrow-down" class="mt-2" :href="route('reportManager')"
-                        :current="request()->routeIs('reportManager')" wire:navigate>{{ __('Laporan Barang Manager') }}
-                    </flux:navlist.item>
-
-                    <flux:navlist.item icon="chat-bubble-left-right" class="mt-2" :href="route('admin.lostItems')"
-                        :current="request()->routeIs('admin.lostItems')" wire:navigate>{{ __('Laporan Kehilangan') }}
-                    </flux:navlist.item>
-
-                    <flux:navlist.item icon="chat-bubble-left-right" class="mt-2" :href="route('announcements')"
-                        :current="request()->routeIs('announcements')" wire:navigate>{{ __('Announcements Manager') }}
-                    </flux:navlist.item>
+                    <flux:separator class="my-2" />
                 @endcan
 
-                @can('is-mahasiswa')
-                    <flux:navlist.item icon="inbox-stack" class="mt-2" :href="route('reportMhs')"
-                        :current="request()->routeIs('reportMhs')" wire:navigate>{{ __('Laporan Saya') }}
+                <flux:navlist.group :heading="__('Aktivitas Saya')" class="grid">
+                    <flux:navlist.item icon="document-text" :href="route('reportMhs')"
+                        :current="request()->routeIs('reportMhs')" wire:navigate>
+                        {{ __('Laporan Penemuan') }}
                     </flux:navlist.item>
 
-                    <flux:navlist.item icon="inbox-stack" class="mt-2" :href="route('myLostItems')"
-                        :current="request()->routeIs('myLostItems')" wire:navigate>{{ __('Laporan Kehilangan') }}
+                    <flux:navlist.item icon="question-mark-circle" :href="route('myLostItems')"
+                        :current="request()->routeIs('myLostItems')" wire:navigate>
+                        {{ __('Laporan Kehilangan') }}
                     </flux:navlist.item>
-                @endcan
-
-            </flux:navlist.group>
-
+                </flux:navlist.group>
+            @endcan
 
             @can('is-superadmin')
-                <flux:navlist.group :heading="__('Admin')" class="grid">
+                <flux:separator class="my-2" />
 
-                    <flux:navlist.item icon="user" :href="route('users')" :current="request()->routeIs('users')"
-                        wire:navigate>{{ __('User Management') }}
+                <flux:navlist.group :heading="__('Sistem & Master Data')" class="grid">
+                    <flux:navlist.item icon="users" :href="route('users')" :current="request()->routeIs('users')"
+                        wire:navigate>
+                        {{ __('Users') }}
                     </flux:navlist.item>
 
-                    <flux:navlist.item icon="chat-bubble-left-right" class="mt-2" :href="route('admin.feedback')"
-                        :current="request()->routeIs('admin.feedback')" wire:navigate>{{ __('Feedback Manager') }}
+                    <flux:navlist.item icon="tag" :href="route('kategori')" :current="request()->routeIs('kategori')"
+                        wire:navigate>
+                        {{ __('Kategori Barang') }}
                     </flux:navlist.item>
 
-                    <flux:navlist.item icon="list-bullet" class="mt-2" :href="route('kategori')"
-                        :current="request()->routeIs('kategori')" wire:navigate>{{ __('Kategori') }}
+                    <flux:navlist.item icon="tag" :href="route('admin.settings.images')"
+                        :current="request()->routeIs('admin.settings.images')" wire:navigate>
+                        {{ __('Setting Website') }}
                     </flux:navlist.item>
 
-
+                    <flux:navlist.item icon="chat-bubble-bottom-center-text" :href="route('admin.feedback')"
+                        :current="request()->routeIs('admin.feedback')" wire:navigate>
+                        {{ __('Feedback') }}
+                    </flux:navlist.item>
                 </flux:navlist.group>
             @endcan
 

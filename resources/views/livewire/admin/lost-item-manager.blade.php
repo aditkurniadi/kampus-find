@@ -18,7 +18,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-zinc-200 dark:divide-zinc-700">
-                        @foreach ($items as $item)
+                        @forelse ($items as $item)
                             <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
                                 <td class="px-6 py-4">
                                     <div class="text-sm font-medium text-gray-900 dark:text-white">
@@ -67,7 +67,19 @@
                                     </a>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="6" class="py-8 text-center text-gray-500 dark:text-gray-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor"
+                                        class="mx-auto mb-2 h-10 w-10 text-gray-400">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                                    </svg>
+                                    Belum ada laporan kehilangan!
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
                 <div class="p-4">{{ $items->links() }}</div>

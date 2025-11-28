@@ -49,8 +49,9 @@
                     </div>
                 </div>
             </div>
+            {{-- GANTI BAGIAN INI --}}
             <div class="relative lg:col-span-5 lg:-mr-8 xl:absolute xl:inset-0 xl:left-1/2 xl:mr-0">
-                <img src="{{ asset('assets/welcome-page.jpg') }}" alt=""
+                <img src="{{ get_setting_image('welcome_image', 'assets/welcome-page.jpg') }}" alt="Welcome Image"
                     class="aspect-3/2 w-full bg-gray-50 object-cover lg:absolute lg:inset-0 lg:aspect-auto lg:h-full dark:bg-gray-800" />
             </div>
         </div>
@@ -85,14 +86,14 @@
             <div
                 class="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3 lg:gap-8">
 
-                {{-- Card 1 --}}
+                {{-- Card 1: Penemuan Hari Ini (Ikon Kaca Pembesar) --}}
                 <div
                     class="flex gap-x-4 rounded-xl bg-white/30 p-6 ring-1 ring-gray-900/5 backdrop-blur-sm dark:bg-white/5 dark:inset-ring dark:inset-ring-white/5">
                     <svg viewBox="0 0 20 20" fill="currentColor"
                         class="h-7 w-5 flex-none text-indigo-600 dark:text-indigo-400">
-                        <path
-                            d="M2 3.5A1.5 1.5 0 0 1 3.5 2h1.148a1.5 1.5 0 0 1 1.465 1.175l.716 3.223a1.5 1.5 0 0 1-1.052 1.767l-.933.267c-.41.117-.643.555-.48.95a11.542 11.542 0 0 0 6.254 6.254c.395.163.833-.07.95-.48l.267-.933a1.5 1.5 0 0 1 1.767-1.052l3.223.716A1.5 1.5 0 0 1 18 15.352V16.5a1.5 1.5 0 0 1-1.5 1.5H15c-1.149 0-2.263-.15-3.326-.43A13.022 13.022 0 0 1 2.43 8.326 13.019 13.019 0 0 1 2 5V3.5Z"
-                            clip-rule="evenodd" fill-rule="evenodd" />
+                        <path fill-rule="evenodd"
+                            d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+                            clip-rule="evenodd" />
                     </svg>
                     <div class="text-base/7">
                         <h3 class="font-semibold text-gray-900 dark:text-white">Penemuan Barang Hari Ini</h3>
@@ -100,14 +101,14 @@
                     </div>
                 </div>
 
-                {{-- Card 2 --}}
+                {{-- Card 2: Telah Kembali (Ikon Check Badge / Sukses) --}}
                 <div
                     class="flex gap-x-4 rounded-xl bg-white/30 p-6 ring-1 ring-gray-900/5 backdrop-blur-sm dark:bg-white/5 dark:inset-ring dark:inset-ring-white/5">
                     <svg viewBox="0 0 20 20" fill="currentColor"
                         class="h-7 w-5 flex-none text-indigo-600 dark:text-indigo-400">
-                        <path
-                            d="m7.171 4.146 1.947 2.466a3.514 3.514 0 0 1 1.764 0l1.947-2.466a6.52 6.52 0 0 0-5.658 0Zm8.683 3.025-2.466 1.947c.15.578.15 1.186 0 1.764l2.466 1.947a6.52 6.52 0 0 0 0-5.658Zm-3.025 8.683-1.947-2.466c-.578.15-1.186.15-1.764 0l-1.947 2.466a6.52 6.52 0 0 0 5.658 0ZM4.146 12.83l2.466-1.947a3.514 3.514 0 0 1 0-1.764L4.146 7.171a6.52 6.52 0 0 0 0 5.658ZM5.63 3.297a8.01 8.01 0 0 1 8.738 0 8.031 8.031 0 0 1 2.334 2.334 8.01 8.01 0 0 1 0 8.738 8.033 8.033 0 0 1-2.334 2.334 8.01 8.01 0 0 1-8.738 0 8.032 8.032 0 0 1-2.334-2.334 8.01 8.01 0 0 1 0-8.738A8.03 8.03 0 0 1 5.63 3.297Zm5.198 4.882a2.008 2.008 0 0 0-2.243.407 1.994 1.994 0 0 0-.407 2.243 1.993 1.993 0 0 0 .992.992 2.008 2.008 0 0 0 2.243-.407c.176-.175.31-.374.407-.585a2.008 2.008 0 0 0-.407-2.243 1.993 1.993 0 0 0-.585-.407Z"
-                            clip-rule="evenodd" fill-rule="evenodd" />
+                        <path fill-rule="evenodd"
+                            d="M16.403 12.652a3 3 0 000-5.304 3 3 0 00-3.75-3.751 3 3 0 00-5.305 0 3 3 0 00-3.751 3.75 3 3 0 000 5.305 3 3 0 003.75 3.751 3 3 0 005.305 0 3 3 0 003.751-3.751zM8.822 9.973a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25a.75.75 0 00-1.22-.872L10.553 11.222 8.822 9.973z"
+                            clip-rule="evenodd" />
                     </svg>
                     <div class="text-base/7">
                         <h3 class="font-semibold text-gray-900 dark:text-white">Penemuan Telah Kembali</h3>
@@ -115,21 +116,20 @@
                     </div>
                 </div>
 
-                {{-- Card 3 --}}
+                {{-- Card 3: Barang Tersedia (Ikon Kotak Arsip / Penyimpanan) --}}
                 <div
                     class="flex gap-x-4 rounded-xl bg-white/30 p-6 ring-1 ring-gray-900/5 backdrop-blur-sm dark:bg-white/5 dark:inset-ring dark:inset-ring-white/5">
                     <svg viewBox="0 0 20 20" fill="currentColor"
                         class="h-7 w-5 flex-none text-indigo-600 dark:text-indigo-400">
                         <path
-                            d="M2 3.5A1.5 1.5 0 0 1 3.5 2h9A1.5 1.5 0 0 1 14 3.5v11.75A2.75 2.75 0 0 0 16.75 18h-12A2.75 2.75 0 0 1 2 15.25V3.5Zm3.75 7a.75.75 0 0 0 0 1.5h4.5a.75.75 0 0 0 0-1.5h-4.5Zm0 3a.75.75 0 0 0 0 1.5h4.5a.75.75 0 0 0 0-1.5h-4.5ZM5 5.75A.75.75 0 0 1 5.75 5h4.5a.75.75 0 0 1 .75.75v2.5a.75.75 0 0 1-.75.75h-4.5A.75.75 0 0 1 5 8.25v-2.5Z"
-                            clip-rule="evenodd" fill-rule="evenodd" />
-                        <path d="M16.5 6.5h-1v8.75a1.25 1.25 0 1 0 2.5 0V8a1.5 1.5 0 0 0-1.5-1.5Z" />
+                            d="M2 3a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H3a1 1 0 01-1-1V3zm0 5a1 1 0 011-1h14a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V8z" />
                     </svg>
                     <div class="text-base/7">
                         <h3 class="font-semibold text-gray-900 dark:text-white">Penemuan Barang Tersedia</h3>
                         <p class="mt-2 text-gray-700 dark:text-gray-300">{{ $barangTersedia }}</p>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

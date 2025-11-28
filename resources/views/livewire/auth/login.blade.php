@@ -134,9 +134,10 @@
             </div>
         </div>
 
+        {{-- GANTI BAGIAN INI --}}
         <div class="relative hidden w-0 flex-1 lg:block">
-            <img src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80"
-                alt="" class="absolute inset-0 size-full object-cover" />
+            <img src="{{ get_setting_image('login_image', 'https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1908&q=80') }}"
+                alt="Login Image" class="absolute inset-0 size-full object-cover" />
         </div>
     </div>
 </x-layouts.auth_layout>

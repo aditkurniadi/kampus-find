@@ -88,6 +88,8 @@ Route::middleware(['auth'])->group(function () {
 
     // Route Chat Room (Bisa diakses Admin & Mahasiswa pemilik item)
     Route::get('/chat/{id}', App\Livewire\Chat\Room::class)->name('chat.room');
+
+    Route::get('/admin/settings/images', \App\Livewire\Admin\SiteSettings::class)->name('admin.settings.images')->middleware('can:is-superadmin');
 });
 
 Route::middleware(['auth', 'can:is-mahasiswa'])->group(function () {
