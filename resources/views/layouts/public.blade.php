@@ -16,10 +16,11 @@
 
 <body class="h-full">
 
-    @include('partials.header') <main>
+    @include('partials.header')
+    <main>
         {{ $slot }}
     </main>
-
+    @include('partials.footer')
     <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
     @livewireScripts
 </body>

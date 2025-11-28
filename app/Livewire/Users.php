@@ -12,6 +12,7 @@ class Users extends Component
     public $name;
     public $email;
     public $password;
+    public $role;
 
     public $showModal = false;
     public $showModalEdit = false;
@@ -27,11 +28,13 @@ class Users extends Component
             'name' => 'required|string|min:3',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
+            'role' => 'required'
         ]);
 
         User::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
+            'role' => $validatedData['role'],
             'password' => Hash::make($validatedData['password']),
         ]);
 
@@ -80,6 +83,7 @@ class Users extends Component
         $validatedData = $this->validate([
             'name' => 'required|string|min:3',
             'email' => 'required|email|' . Rule::unique('users')->ignore($this->userId),
+            'role' => 'required',
             'password' => 'nullable|string|min:6',
         ]);
 
@@ -89,6 +93,7 @@ class Users extends Component
             $updateData = [
                 'name' => $validatedData['name'],
                 'email' => $validatedData['email'],
+                'role' => $validatedData['role'],
             ];
 
             if (!empty($validatedData['password'])) {

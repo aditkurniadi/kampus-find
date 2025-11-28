@@ -28,6 +28,8 @@ class FoundItems extends Component
     public $showModal = false;
     public $showModalEdit = false;
     public $showModalDelete = false;
+    public $showModalComplete = false;
+    public $showModalInfo = false;
 
     public $search = '';
     public $dateFilter = 'month';
@@ -35,6 +37,11 @@ class FoundItems extends Component
 
     public $foundId;
     public $existingImage;
+
+    public $taken_by_name;
+    public $taken_by_npm;
+    public $taken_by_phone;
+    public $selectedItemId;
 
     public function resetFields()
     {
@@ -63,7 +70,10 @@ class FoundItems extends Component
         $this->showModal = false;
         $this->showModalEdit = false;
         $this->showModalDelete = false;
-        $this->resetFields(); // Gunakan helper reset
+        $this->showModalComplete = false;
+        $this->showModalInfo = false;
+        $this->resetFields();
+        $this->reset(['name', 'taken_by_name', 'taken_by_npm', 'taken_by_phone']);
     }
 
     public function createData()
@@ -185,6 +195,39 @@ class FoundItems extends Component
         }
     }
 
+    public function openCompleteModal($id)
+    {
+        $this->selectedItemId = $id;
+        $this->reset(['taken_by_name', 'taken_by_npm', 'taken_by_phone']); // Bersihkan form
+        $this->showModalComplete = true;
+    }
+
+    public function markAsCompleted()
+    {
+        // Validasi input
+        $this->validate([
+            'taken_by_name' => 'required|string|max:255',
+            'taken_by_npm' => 'required|string|max:20',
+            'taken_by_phone' => 'required|string|max:20',
+        ]);
+
+        $item = found_items::find($this->selectedItemId);
+
+        if ($item) {
+            $item->update([
+                'status' => 'selesai',
+                'taken_by_name' => $this->taken_by_name,
+                'taken_by_npm' => $this->taken_by_npm,
+                'taken_by_phone' => $this->taken_by_phone,
+                // Opsional: 'taken_at' => now(), jika ada kolom tanggal pengambilan
+            ]);
+
+            $this->dispatch('show-toast', type: 'success', message: 'Barang berhasil diperbarui!.');
+        }
+
+        $this->closeModal();
+    }
+
     public function updatingSearch()
     {
         $this->resetPage();
@@ -207,25 +250,43 @@ class FoundItems extends Component
         };
     }
 
-    public function toggleStatus($itemId)
+    public function toggleStatus($id)
     {
-        try {
-            $item = found_items::findOrFail($itemId);
-
+        $item = found_items::find($id);
+        if ($item) {
+            // Logika toggle seperti biasa
             if ($item->status == 'available') {
                 $item->status = 'selesai';
-                $message = 'Status diubah menjadi Selesai.';
             } else {
-                $item->status = 'available';
-                $message = 'Status diubah menjadi Tersedia.';
+                // Jika undo, kosongkan data pengambil
+                $item->update([
+                    'status' => 'available',
+                    'taken_by_name' => null,
+                    'taken_by_npm' => null,
+                    'taken_by_phone' => null,
+                ]);
             }
-
             $item->save();
+            $this->dispatch('show-toast', type: 'success', message: 'Data berhasil diperbaru!.');
+        }
 
-            $this->dispatch('item-updated'); // Refresh dashboard (jika ada)
-            $this->dispatch('show-toast', type: 'success', message: $message);
-        } catch (\Exception $e) {
-            $this->dispatch('show-toast', type: 'warning', message: 'Gagal mengubah status.');
+        // Tutup semua modal setelah aksi
+        $this->closeModal();
+    }
+
+    public function openInfoModal($id)
+    {
+        $item = found_items::find($id);
+
+        if ($item) {
+            $this->selectedItemId = $item->id;
+            $this->name = $item->name; // Untuk ditampilkan di header modal
+            $this->image = $item->image; // Untuk ditampilkan di header modal
+            $this->taken_by_name = $item->taken_by_name;
+            $this->taken_by_npm = $item->taken_by_npm;
+            $this->taken_by_phone = $item->taken_by_phone;
+
+            $this->showModalInfo = true;
         }
     }
 

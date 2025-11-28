@@ -288,27 +288,27 @@
 
                                     <!-- [BARU] Tombol Toggle Status (Tanpa Dropdown) -->
                                     @if ($item->status == 'available')
-                                        <!-- Jika Selesai, tampilkan tombol "Tandai Tersedia" -->
-                                        <button wire:click="toggleStatus({{ $item->id }})" type="button"
-                                            class="p-1 rounded-full text-yellow-600 hover:text-yellow-900 dark:text-yellow-500 dark:hover:text-yellow-700 hover:bg-yellow-100 dark:hover:bg-yellow-800/50"
-                                            title="Tandai Selesai (Undo)">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                                fill="currentColor" class="size-6">
-                                                <path fill-rule="evenodd"
-                                                    d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                        </button>
-                                    @else
-                                        <!-- Jika Selesai, tampilkan tombol "Tandai Tersedia" -->
-                                        <button wire:click="toggleStatus({{ $item->id }})" type="button"
-                                            class="p-1 rounded-full text-yellow-600 hover:text-yellow-900 dark:text-yellow-500 dark:hover:text-yellow-700 hover:bg-yellow-100 dark:hover:bg-yellow-800/50"
-                                            title="Tandai Tersedia (Undo)">
+                                        <button wire:click="openCompleteModal({{ $item->id }})" type="button"
+                                            class="p-1 rounded-full text-green-600 hover:text-green-900 dark:text-green-500 dark:hover:text-green-700 hover:bg-green-100 dark:hover:bg-green-800/50"
+                                            title="Tandai Selesai">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                class="size-5 align-middle">
+                                                class="size-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+                                                    d="m4.5 12.75 6 6 9-13.5" />
+                                            </svg>
+                                        </button>
+                                    @elseif ($item->status == 'selesai')
+                                        <button wire:click="openInfoModal({{ $item->id }})" type="button"
+                                            class="p-1 rounded-full text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/50"
+                                            title="Lihat Data Pengambil">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                class="size-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                             </svg>
                                         </button>
                                     @endif
@@ -697,6 +697,202 @@
                             </button>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    {{-- Modal Konfirmasi Barang Diambil --}}
+    @if ($showModalComplete)
+        <div
+            class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-gray-900/50">
+            <div class="relative w-full max-w-md p-4">
+                <div class="relative rounded-lg bg-white shadow-sm dark:bg-gray-700">
+
+                    {{-- Header Modal --}}
+                    <div
+                        class="flex items-center justify-between rounded-t border-b border-gray-200 p-4 dark:border-gray-600 md:p-5">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            Data Pengambil Barang
+                        </h3>
+                        <button wire:click="closeModal" type="button"
+                            class="ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white">
+                            <svg class="h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    {{-- Body Modal --}}
+                    <div class="p-4 md:p-5">
+                        <form wire:submit.prevent="markAsCompleted">
+                            <div class="space-y-4">
+                                <p class="text-sm text-gray-500 dark:text-gray-300">
+                                    Silahkan lengkapi data mahasiswa/orang yang mengambil barang ini sebagai bukti
+                                    arsip.
+                                </p>
+
+                                {{-- Input Nama Pengambil --}}
+                                <div>
+                                    <label for="taken_by_name"
+                                        class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Nama
+                                        Pengambil</label>
+                                    <input wire:model.defer="taken_by_name" type="text" id="taken_by_name"
+                                        required
+                                        class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                        placeholder="Contoh: Budi Santoso">
+                                    @error('taken_by_name')
+                                        <span class="text-xs text-red-500">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                {{-- Input NPM --}}
+                                <div>
+                                    <label for="taken_by_npm"
+                                        class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">NPM /
+                                        NIK</label>
+                                    <input wire:model.defer="taken_by_npm" type="text" id="taken_by_npm" required
+                                        class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                        placeholder="Contoh: 210102030">
+                                    @error('taken_by_npm')
+                                        <span class="text-xs text-red-500">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                {{-- Input Nomor HP --}}
+                                <div>
+                                    <label for="taken_by_phone"
+                                        class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Nomor HP /
+                                        WA</label>
+                                    <input wire:model.defer="taken_by_phone" type="text" id="taken_by_phone"
+                                        required
+                                        class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                        placeholder="Contoh: 08123456789">
+                                    @error('taken_by_phone')
+                                        <span class="text-xs text-red-500">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            {{-- Footer Modal --}}
+                            <div class="mt-6 flex justify-end space-x-2">
+                                <button wire:click="closeModal" type="button"
+                                    class="rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-900 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
+                                    Batal
+                                </button>
+                                <button type="submit"
+                                    class="rounded-lg bg-green-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-500 dark:hover:bg-green-600">
+                                    <span wire:loading.remove wire:target="markAsCompleted">Selesai & Simpan</span>
+                                    <span wire:loading wire:target="markAsCompleted">Menyimpan...</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    @if ($showModalInfo)
+        <div
+            class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-gray-900/50">
+            <div class="relative w-full max-w-md p-4">
+                <div class="relative rounded-lg bg-white shadow-xl dark:bg-gray-800">
+
+                    <div
+                        class="flex items-center justify-between border-b border-gray-200 px-4 py-3 dark:border-gray-700">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="size-5 text-indigo-500">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
+                            </svg>
+                            Detail Pengambil Barang
+                        </h3>
+                        <button wire:click="closeModal"
+                            class="text-gray-400 hover:text-gray-900 dark:hover:text-white">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="p-6 space-y-4">
+                        <div class="mb-4 rounded-md bg-indigo-50 p-3 dark:bg-indigo-900/30">
+                            <p class="text-xs text-indigo-600 dark:text-indigo-300 uppercase tracking-wide font-bold">
+                                Barang Diambil</p>
+                            <p class="text-sm font-medium text-gray-900 dark:text-white">{{ $name }}</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-4">
+
+                            <div class="shrink-0">
+                                @if ($image)
+                                    <img src="{{ asset('storage/' . $image) }}"
+                                        class="h-16 w-16 rounded-lg object-cover border border-indigo-200 dark:border-indigo-700 shadow-sm"
+                                        alt="Foto Barang">
+                                @else
+                                    <div
+                                        class="flex h-16 w-16 items-center justify-center rounded-lg bg-indigo-100 text-indigo-400 dark:bg-indigo-800">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="size-8">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                        </svg>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <div>
+                                <label
+                                    class="block text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Nama
+                                    Pengambil</label>
+                                <p class="mt-1 text-base font-semibold text-gray-900 dark:text-white">
+                                    {{ $taken_by_name }}</p>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label
+                                        class="block text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">NPM
+                                        / NIK</label>
+                                    <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ $taken_by_npm }}</p>
+                                </div>
+                                <div>
+                                    <label
+                                        class="block text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Nomor
+                                        HP</label>
+                                    <a href="https://wa.me/{{ preg_replace('/^0/', '62', $taken_by_phone) }}"
+                                        target="_blank"
+                                        class="mt-1 inline-flex items-center gap-1 text-sm font-medium text-green-600 hover:underline dark:text-green-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                            fill="currentColor" class="size-4">
+                                            <path fill-rule="evenodd"
+                                                d="M2 3.5A1.5 1.5 0 0 1 3.5 2h1.148a1.5 1.5 0 0 1 1.465 1.175l.716 3.223a1.5 1.5 0 0 1-1.052 1.767l-.933.267c-.41.117-.643.555-.48.95a11.542 11.542 0 0 0 6.254 6.254c.395.163.833-.07.95-.48l.267-.933a1.5 1.5 0 0 1 1.767-1.052l3.223.716A1.5 1.5 0 0 1 18 15.352V16.5a1.5 1.5 0 0 1-1.5 1.5H15c-1.149 0-2.263-.15-3.326-.43A13.022 13.022 0 0 1 2.43 8.326 13.019 13.019 0 0 1 2 5V3.5Z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        {{ $taken_by_phone }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="flex items-center justify-between border-t border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-700/50 rounded-b-lg">
+                        <button wire:click="toggleStatus({{ $selectedItemId }})" type="button"
+                            class="text-sm text-red-600 hover:text-red-800 hover:underline dark:text-red-400 dark:hover:text-red-300">
+                            Batalkan Status Selesai (Undo)
+                        </button>
+                        <button wire:click="closeModal"
+                            class="rounded-lg bg-gray-200 px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-300 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500">
+                            Tutup
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </div>

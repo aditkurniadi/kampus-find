@@ -10,14 +10,14 @@
                     <x-app-logo-icon class="h-20 w-auto text-indigo-500" />
 
                     <h2 class="mt-8 text-2xl/9 font-bold tracking-tight text-white">
-                        {{ __('Log in to your account Kampus - Find') }}
+                        {{ __('Login Kampus - Find') }}
                     </h2>
 
                     @if (Route::has('register'))
                         <p class="mt-2 text-sm/6 text-gray-400">
-                            {{ __("Don't have an account?") }}
+                            {{ __('Belum memiliki akun?') }}
                             <a href="{{ route('register') }}" wire:navigate
-                                class="font-semibold text-indigo-400 hover:text-indigo-300">{{ __('Sign up') }}</a>
+                                class="font-semibold text-indigo-400 hover:text-indigo-300">{{ __('Register') }}</a>
                         </p>
                     @endif
                 </div>
@@ -35,7 +35,7 @@
 
                             <div>
                                 <label for="email"
-                                    class="block text-sm/6 font-medium text-gray-100">{{ __('Email address') }}</label>
+                                    class="block text-sm/6 font-medium text-gray-100">{{ __('Alamat Email') }}</label>
                                 <div class="mt-2">
                                     <input id="email" type="email" name="email" value="{{ old('email') }}"
                                         required autocomplete="email" autofocus
