@@ -19,7 +19,12 @@ class found_items extends Model
         'rejection_reason',
         'user_id',
         'category_id',
-        'handled_by_user_id'
+        'handled_by_user_id',
+
+        'taken_by_name',
+        'taken_by_npm',
+        'taken_by_phone',
+        'taken_at',
     ];
 
     protected $casts = [
