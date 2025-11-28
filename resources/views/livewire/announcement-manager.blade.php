@@ -5,7 +5,7 @@
     <div>
         <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
             <div>
-                <h2 class="text-2xl font-semibold dark:text-white">Manajemen Pengumuman</h2>
+                <h2 class="text-2xl font-semibold dark:text-white">Manajemen Pengumuman & Preview</h2>
             </div>
             <div>
                 <button wire:click='openCreateModal' type="button"
@@ -308,6 +308,8 @@
                 </div>
             </div>
         @endif
+
+        @include('livewire.dashboard._announcement-card')
 
     </div>
 </div>

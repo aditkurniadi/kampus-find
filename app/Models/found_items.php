@@ -45,4 +45,12 @@ class found_items extends Model
     {
         return $this->belongsTo(User::class, 'handled_by_user_id');
     }
+
+    // --- TAMBAHKAN INI ---
+    public function messages()
+    {
+        // Relasi ke tabel 'messages', foreign key 'lost_item_id'
+        // (Asumsi kita menggunakan 'lost_item_id' di tabel messages untuk merujuk ke barang ini)
+        return $this->hasMany(Message::class, 'lost_item_id');
+    }
 }

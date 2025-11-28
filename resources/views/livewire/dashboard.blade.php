@@ -1,5 +1,5 @@
 <div>
-    @can('is-all')
+    @can('can-view-announcement')
         @if ($announcements && $announcements->isNotEmpty())
             @include('livewire.dashboard._announcement-card', [
                 'announcements' => $announcements,

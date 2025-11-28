@@ -31,6 +31,10 @@
                         :current="request()->routeIs('reportManager')" wire:navigate>{{ __('Laporan Barang Manager') }}
                     </flux:navlist.item>
 
+                    <flux:navlist.item icon="chat-bubble-left-right" class="mt-2" :href="route('admin.lostItems')"
+                        :current="request()->routeIs('admin.lostItems')" wire:navigate>{{ __('Laporan Kehilangan') }}
+                    </flux:navlist.item>
+
                     <flux:navlist.item icon="chat-bubble-left-right" class="mt-2" :href="route('announcements')"
                         :current="request()->routeIs('announcements')" wire:navigate>{{ __('Announcements Manager') }}
                     </flux:navlist.item>
@@ -40,8 +44,11 @@
                     <flux:navlist.item icon="inbox-stack" class="mt-2" :href="route('reportMhs')"
                         :current="request()->routeIs('reportMhs')" wire:navigate>{{ __('Laporan Saya') }}
                     </flux:navlist.item>
-                @endcan
 
+                    <flux:navlist.item icon="inbox-stack" class="mt-2" :href="route('myLostItems')"
+                        :current="request()->routeIs('myLostItems')" wire:navigate>{{ __('Laporan Kehilangan') }}
+                    </flux:navlist.item>
+                @endcan
 
             </flux:navlist.group>
 
