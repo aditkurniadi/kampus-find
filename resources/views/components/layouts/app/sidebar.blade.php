@@ -27,11 +27,11 @@
                         :current="request()->routeIs('foundItems')" wire:navigate>{{ __('Barang Managemet') }}
                     </flux:navlist.item>
 
-                    <flux:navlist.item icon="inbox-stack" class="mt-2" :href="route('reportManager')"
+                    <flux:navlist.item icon="inbox-arrow-down" class="mt-2" :href="route('reportManager')"
                         :current="request()->routeIs('reportManager')" wire:navigate>{{ __('Laporan Barang Manager') }}
                     </flux:navlist.item>
 
-                    <flux:navlist.item icon="inbox-stack" class="mt-2" :href="route('announcements')"
+                    <flux:navlist.item icon="chat-bubble-left-right" class="mt-2" :href="route('announcements')"
                         :current="request()->routeIs('announcements')" wire:navigate>{{ __('Announcements Manager') }}
                     </flux:navlist.item>
                 @endcan
@@ -53,9 +53,14 @@
                         wire:navigate>{{ __('User Management') }}
                     </flux:navlist.item>
 
+                    <flux:navlist.item icon="chat-bubble-left-right" class="mt-2" :href="route('admin.feedback')"
+                        :current="request()->routeIs('admin.feedback')" wire:navigate>{{ __('Feedback Manager') }}
+                    </flux:navlist.item>
+
                     <flux:navlist.item icon="list-bullet" class="mt-2" :href="route('kategori')"
                         :current="request()->routeIs('kategori')" wire:navigate>{{ __('Kategori') }}
                     </flux:navlist.item>
+
 
                 </flux:navlist.group>
             @endcan

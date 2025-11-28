@@ -39,6 +39,9 @@
                                     class="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8 dark:border-white/15 dark:bg-gray-900/75 dark:text-white">
                                     Name</th>
                                 <th scope="col"
+                                    class="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8 dark:border-white/15 dark:bg-gray-900/75 dark:text-white">
+                                    Role</th>
+                                <th scope="col"
                                     class="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:table-cell dark:border-white/15 dark:bg-gray-900/75 dark:text-white">
                                     Email</th>
                                 <th scope="col"
@@ -52,6 +55,25 @@
                                     <td
                                         class="whitespace-nowrap border-b border-gray-200 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8 dark:border-white/10 dark:text-white">
                                         {{ $user->name }}</td>
+                                    <td
+                                        class="whitespace-nowrap border-b border-gray-200 py-4 pl-4 pr-3 text-sm font-medium sm:pl-6 lg:pl-8 dark:border-white/10">
+                                        @if ($user->role == 'superadmin')
+                                            <span
+                                                class="inline-flex items-center rounded-md bg-purple-50 px-2 py-1 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-700/10 dark:bg-purple-400/10 dark:text-purple-400 dark:ring-purple-400/20">
+                                                Super Admin
+                                            </span>
+                                        @elseif ($user->role == 'keamanan')
+                                            <span
+                                                class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10 dark:bg-blue-400/10 dark:text-blue-400 dark:ring-blue-400/20">
+                                                Keamanan
+                                            </span>
+                                        @else
+                                            <span
+                                                class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 dark:bg-gray-400/10 dark:text-gray-400 dark:ring-gray-400/20">
+                                                Mahasiswa
+                                            </span>
+                                        @endif
+                                    </td>
                                     <td
                                         class="hidden whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500 sm:table-cell dark:border-white/10 dark:text-gray-400">
                                         {{ $user->email }}</td>
@@ -142,6 +164,20 @@
                                     @enderror
                                 </div>
                                 <div>
+                                    <label for="role"
+                                        class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Role</label>
+                                    <select wire:model.defer="role" name="role" id="role"
+                                        class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+                                        <option value="">Pilih Role</option>
+                                        <option value="superadmin">Super Admin</option>
+                                        <option value="keamanan">Keamanan</option>
+                                        <option value="mahasiswa">Mahasiswa</option>
+                                    </select>
+                                    @error('role')
+                                        <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
                                     <label for="password"
                                         class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Password</label>
                                     <input wire:model.defer="password" type="password" name="password"
@@ -169,6 +205,12 @@
             </div>
         @endif
 
+        {{-- 
+            Tambah edit role, agar bisa ketika ada user baru kita bisa kasih dia role apa tidak harus edit melalui database
+            kareana default role adalah 
+            
+            Kemudian untuk edit data, email dibuat read-only
+        --}}
         @if ($showModalEdit)
             <!-- Modal Edit -->
             <div
@@ -178,7 +220,7 @@
                         <div
                             class="flex items-center justify-between rounded-t border-b border-gray-200 p-4 dark:border-gray-600 md:p-5">
                             <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                                Edit Data User: {{ $userId }}
+                                Edit Data User: {{ $name }}
                             </h3>
                             <button wire:click="closeModal" type="button"
                                 class="ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white">
@@ -206,11 +248,27 @@
                                         class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Email</label>
                                     <input wire:model.defer="email" type="email" name="email" id="email"
                                         class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                                        placeholder="nama@gmail.com" />
+                                        placeholder="nama@gmail.com" readonly />
                                     @error('email')
                                         <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
                                     @enderror
                                 </div>
+
+                                <div>
+                                    <label for="role_edit"
+                                        class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Role</label>
+                                    <select wire:model.defer="role" id="role_edit"
+                                        class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+                                        <option value="">Pilih Role</option>
+                                        <option value="superadmin">Super Admin</option>
+                                        <option value="keamanan">Keamanan</option>
+                                        <option value="mahasiswa">Mahasiswa</option>
+                                    </select>
+                                    @error('role')
+                                        <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
                                 <div>
                                     <label for="password"
                                         class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Password

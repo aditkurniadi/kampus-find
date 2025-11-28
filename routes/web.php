@@ -11,18 +11,30 @@ use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\TwoFactor;
 use App\Livewire\AnnouncementManager;
+use App\Livewire\FeedbackManager;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\MyReports;
 use App\Livewire\ModeratorReports;
+use App\Models\Feedback;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome', [
+        // Data Statistik yang lama
         'dataCount' => found_items::whereDate('date_found', now()->today())->count(),
         'dataSelesai' => found_items::where('status', 'selesai')->count(),
         'barangTersedia' => found_items::where('status', 'available')->count(),
+
+        'feedbacks' => Feedback::with('user')
+            ->where('is_visible', true)
+            ->latest()
+            ->take(10) // Ambil 10 ulasan terbaru
+            ->get(),
+        'averageRating' => Feedback::where('is_visible', true)->avg('rating')
     ]);
 })->name('home');
+
+Route::get('/feedback', App\Livewire\UserFeedback::class)->name('feedback')->middleware('auth');
 
 Route::get('/test', function () {
     return view('test');
@@ -60,4 +72,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('report', MyReports::class)->name('reportMhs')->can('is-mahasiswa');
     Route::get('reportManager', ModeratorReports::class)->name('reportManager')->can('is-keamanan-superadmin');
+
+    Route::get('admin/feedback-manager', FeedbackManager::class)->name('admin.feedback')->can('is-keamanan-superadmin');
 });
