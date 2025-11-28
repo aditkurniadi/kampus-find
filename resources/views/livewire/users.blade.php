@@ -169,6 +169,12 @@
             </div>
         @endif
 
+        {{-- 
+            Tambah edit role, agar bisa ketika ada user baru kita bisa kasih dia role apa tidak harus edit melalui database
+            kareana default role adalah 
+            
+            Kemudian untuk edit data, email dibuat read-only
+        --}}
         @if ($showModalEdit)
             <!-- Modal Edit -->
             <div
@@ -178,7 +184,7 @@
                         <div
                             class="flex items-center justify-between rounded-t border-b border-gray-200 p-4 dark:border-gray-600 md:p-5">
                             <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                                Edit Data User: {{ $userId }}
+                                Edit Data User: {{ $name }}
                             </h3>
                             <button wire:click="closeModal" type="button"
                                 class="ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white">
