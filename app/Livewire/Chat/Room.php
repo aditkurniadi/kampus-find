@@ -65,7 +65,7 @@ class Room extends Component
 
             // Broadcast event
             broadcast(new MessageSent($autoMessage->load('sender')))->toOthers();
-            
+
             // Reload messages
             $this->loadMessages();
             $this->dispatch('chat-scroll');

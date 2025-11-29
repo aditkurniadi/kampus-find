@@ -155,7 +155,9 @@
                                         @if (empty($line))
                                             <div class="h-1"></div>
                                         @elseif (str_contains($line, '━━'))
-                                            <div class="border-t {{ $isMe ? 'border-indigo-400' : 'border-gray-300 dark:border-gray-600' }} my-2"></div>
+                                            <div
+                                                class="border-t {{ $isMe ? 'border-indigo-400' : 'border-gray-300 dark:border-gray-600' }} my-2">
+                                            </div>
                                         @elseif (str_contains($line, ':'))
                                             @php
                                                 $parts = explode(':', $line, 2);
@@ -164,14 +166,20 @@
                                             @endphp
                                             @if ($label && $value)
                                                 <div>
-                                                    <span class="font-semibold {{ $isMe ? 'text-indigo-200' : 'text-blue-600 dark:text-blue-400' }}">{{ $label }}:</span>
-                                                    <span class="ml-1 {{ $isMe ? 'text-white' : 'text-gray-700 dark:text-gray-300' }}">{{ $value }}</span>
+                                                    <span
+                                                        class="font-semibold {{ $isMe ? 'text-indigo-200' : 'text-blue-600 dark:text-blue-400' }}">{{ $label }}:</span>
+                                                    <span
+                                                        class="ml-1 {{ $isMe ? 'text-white' : 'text-gray-700 dark:text-gray-300' }}">{{ $value }}</span>
                                                 </div>
                                             @else
-                                                <div class="{{ $isMe ? 'text-white' : 'text-gray-700 dark:text-gray-300' }}">{{ $line }}</div>
+                                                <div
+                                                    class="{{ $isMe ? 'text-white' : 'text-gray-700 dark:text-gray-300' }}">
+                                                    {{ $line }}</div>
                                             @endif
                                         @else
-                                            <div class="{{ $isMe ? 'text-white' : 'text-gray-700 dark:text-gray-300' }}">{{ $line }}</div>
+                                            <div
+                                                class="{{ $isMe ? 'text-white' : 'text-gray-700 dark:text-gray-300' }}">
+                                                {{ $line }}</div>
                                         @endif
                                     @endforeach
                                 </div>
@@ -227,6 +235,21 @@
                 }, 100);
             }
         });
+
+        // ===== PUSHER REAL-TIME LISTENER =====
+        if (window.Echo) {
+            Echo.private('chat.{{ $lostItem->id }}')
+                .listen('MessageSent', (data) => {
+                    console.log('Pesan baru dari Pusher:', data);
+                    // Refresh component Livewire
+                    @this.dispatch('refreshMessages');
+                })
+                .error((error) => {
+                    console.error('Pusher error:', error);
+                });
+        } else {
+            console.warn('Echo/Pusher belum tersedia');
+        }
     </script>
 
     {{-- ========================================== --}}
@@ -407,6 +430,21 @@
                 }, 100);
             }
         });
+
+        // ===== PUSHER REAL-TIME LISTENER =====
+        if (window.Echo) {
+            Echo.private('chat.{{ $lostItem->id }}')
+                .listen('MessageSent', (data) => {
+                    console.log('Pesan baru dari Pusher:', data);
+                    // Refresh component Livewire
+                    @this.dispatch('refreshMessages');
+                })
+                .error((error) => {
+                    console.error('Pusher error:', error);
+                });
+        } else {
+            console.warn('Echo/Pusher belum tersedia');
+        }
     </script>
 
 </div>
