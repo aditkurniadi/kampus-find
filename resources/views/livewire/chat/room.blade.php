@@ -83,128 +83,138 @@
         </div>
 
         @foreach ($messages as $msg)
-    @php
-        // 🚨 PERBAIKAN KRITIS: Lakukan Type Casting (int) untuk memastikan perbandingan ID
-        $currentAuthId = (int)auth()->id();
-        $senderId = (int)$msg['sender_id'];
-        $isMe = $senderId === $currentAuthId; // Menentukan posisi gelembung
+            @php
+                // 🚨 PERBAIKAN KRITIS: Lakukan Type Casting (int) untuk memastikan perbandingan ID
+                $currentAuthId = (int) auth()->id();
+                $senderId = (int) $msg['sender_id'];
+                $isMe = $senderId === $currentAuthId; // Menentukan posisi gelembung
 
-        // Logika Nama Pengirim
-        $senderRole = $msg['sender']['role'] ?? 'mahasiswa';
-        $senderName = $msg['sender']['name'];
-        
-        // Jika pengirim adalah Admin/Keamanan
-        if (in_array($senderRole, ['superadmin', 'keamanan'])) {
-            $senderName = 'Admin Kampus';
-        } else if ($isMe) {
-            // Jika saya (Mahasiswa) adalah pengirim, tidak perlu tampilkan nama di atas bubble saya.
-            // (Kita biarkan variabelnya terisi, tapi hanya dipakai saat $isMe = false)
-        } else {
-            // Jika pengirim adalah Mahasiswa lain, tampilkan namanya
-            $senderName = $msg['sender']['name'];
-        }
+                // Logika Nama Pengirim
+                $senderRole = $msg['sender']['role'] ?? 'mahasiswa';
+                $senderName = $msg['sender']['name'];
 
-        // Deteksi apakah ini pesan auto-send (info barang)
-        $isAutoMessage = str_contains($msg['message'] ?? '', '📋 Informasi Barang Hilang');
-    @endphp
+                // Jika pengirim adalah Admin/Keamanan
+                if (in_array($senderRole, ['superadmin', 'keamanan'])) {
+                    $senderName = 'Admin Kampus';
+                } elseif ($isMe) {
+                    // Jika saya (Mahasiswa) adalah pengirim, tidak perlu tampilkan nama di atas bubble saya.
+                    // (Kita biarkan variabelnya terisi, tapi hanya dipakai saat $isMe = false)
+                } else {
+                    // Jika pengirim adalah Mahasiswa lain, tampilkan namanya
+                    $senderName = $msg['sender']['name'];
+                }
 
-    {{-- 1. Posisi Gelembung: justify-end (kanan) jika $isMe TRUE --}}
-    <div class="flex w-full {{ $isMe ? 'justify-end' : 'justify-start' }} relative z-0 group">
-        <div class="flex max-w-[85%] md:max-w-[70%] flex-col {{ $isMe ? 'items-end' : 'items-start' }}">
+                // Deteksi apakah ini pesan auto-send (info barang)
+                $isAutoMessage = str_contains($msg['message'] ?? '', '📋 Informasi Barang Hilang');
+            @endphp
 
-            {{-- 2. Nama Pengirim (Hanya muncul jika pesan dari orang lain / !$isMe) --}}
-            @if (!$isMe)
-                <span
-                    class="text-[11px] font-bold mb-1 ml-1 {{ $senderName == 'Admin Kampus' ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-500 dark:text-gray-400' }}">
-                    {{ $senderName }}
-                    @if ($senderName == 'Admin Kampus')
-                        {{-- Icon Centang Biru untuk Admin --}}
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                            class="w-3 h-3 inline-block -mt-0.5 ml-0.5">
-                            <path fill-rule="evenodd"
-                                d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z"
-                                clip-rule="evenodd" />
-                        </svg>
+            {{-- 1. Posisi Gelembung: justify-end (kanan) jika $isMe TRUE --}}
+            <div class="flex w-full {{ $isMe ? 'justify-end' : 'justify-start' }} relative z-0 group">
+                <div class="flex max-w-[85%] md:max-w-[70%] flex-col {{ $isMe ? 'items-end' : 'items-start' }}">
+
+                    {{-- 2. Nama Pengirim (Hanya muncul jika pesan dari orang lain / !$isMe) --}}
+                    @if (!$isMe)
+                        <span
+                            class="text-[11px] font-bold mb-1 ml-1 {{ $senderName == 'Admin Kampus' ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-500 dark:text-gray-400' }}">
+                            {{ $senderName }}
+                            @if ($senderName == 'Admin Kampus')
+                                {{-- Icon Centang Biru untuk Admin --}}
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                    class="w-3 h-3 inline-block -mt-0.5 ml-0.5">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            @endif
+                        </span>
                     @endif
-                </span>
-            @endif
 
-            {{-- 3. Bubble Chat (Sisanya) --}}
-            <div
-                class="px-4 py-2.5 shadow-sm text-[15px] leading-relaxed break-words relative transition-all
+                    {{-- 3. Bubble Chat (Sisanya) --}}
+                    <div
+                        class="px-4 py-2.5 shadow-sm text-[15px] leading-relaxed break-words relative transition-all
                 {{ $isMe
                     ? 'bg-indigo-600 text-white rounded-2xl rounded-tr-none'
                     : 'bg-white dark:bg-zinc-800 dark:text-gray-100 text-gray-800 rounded-2xl rounded-tl-none border border-gray-100 dark:border-zinc-700' }}
                 {{ $isAutoMessage ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800' : '' }}">
 
-                {{-- Pesan Teks (jika ada) --}}
-                @if (!empty($msg['message']))
-                    @if ($isAutoMessage)
-                        {{-- Styling khusus untuk pesan auto-send --}}
-                        <div class="text-sm leading-relaxed space-y-1.5">
-                            @php
-                                $lines = explode("\n", $msg['message']);
-                            @endphp
-                            @foreach ($lines as $line)
-                                @php
-                                    $line = trim($line);
-                                @endphp
-                                @if (empty($line))
-                                    <div class="h-1"></div>
-                                @elseif (str_contains($line, '━━'))
-                                    <div
-                                        class="border-t {{ $isMe ? 'border-indigo-400' : 'border-gray-300 dark:border-gray-600' }} my-2">
-                                    </div>
-                                @elseif (str_contains($line, ':'))
+                        {{-- Pesan Teks (jika ada) --}}
+                        @if (!empty($msg['message']))
+                            @if ($isAutoMessage)
+                                {{-- Styling khusus untuk pesan auto-send --}}
+                                <div class="text-sm leading-relaxed space-y-1.5">
                                     @php
-                                        $parts = explode(':', $line, 2);
-                                        $label = trim($parts[0] ?? '');
-                                        $value = trim($parts[1] ?? '');
+                                        $lines = explode("\n", $msg['message']);
                                     @endphp
-                                    @if ($label && $value)
-                                        <div>
-                                            <span
-                                                class="font-semibold {{ $isMe ? 'text-indigo-200' : 'text-blue-600 dark:text-blue-400' }}">{{ $label }}:</span>
-                                            <span
-                                                class="ml-1 {{ $isMe ? 'text-white' : 'text-gray-700 dark:text-gray-300' }}">{{ $value }}</span>
-                                        </div>
-                                    @else
-                                        <div
-                                            class="{{ $isMe ? 'text-white' : 'text-gray-700 dark:text-gray-300' }}">
-                                            {{ $line }}</div>
-                                    @endif
-                                @else
-                                    <div
-                                        class="{{ $isMe ? 'text-white' : 'text-gray-700 dark:text-gray-300' }}">
-                                        {{ $line }}</div>
-                                @endif
-                            @endforeach
-                        </div>
-                    @else
-                        <div class="whitespace-pre-wrap">{{ $msg['message'] }}</div>
-                    @endif
-                @endif
-                {{-- End of Teks --}}
+                                    @foreach ($lines as $line)
+                                        @php
+                                            $line = trim($line);
+                                        @endphp
+                                        @if (empty($line))
+                                            <div class="h-1"></div>
+                                        @elseif (str_contains($line, '━━'))
+                                            <div
+                                                class="border-t {{ $isMe ? 'border-indigo-400' : 'border-gray-300 dark:border-gray-600' }} my-2">
+                                            </div>
+                                        @elseif (str_contains($line, ':'))
+                                            @php
+                                                $parts = explode(':', $line, 2);
+                                                $label = trim($parts[0] ?? '');
+                                                $value = trim($parts[1] ?? '');
+                                            @endphp
+                                            @if ($label && $value)
+                                                <div>
+                                                    <span
+                                                        class="font-semibold {{ $isMe ? 'text-indigo-200' : 'text-blue-600 dark:text-blue-400' }}">{{ $label }}:</span>
+                                                    <span
+                                                        class="ml-1 {{ $isMe ? 'text-white' : 'text-gray-700 dark:text-gray-300' }}">{{ $value }}</span>
+                                                </div>
+                                            @else
+                                                <div
+                                                    class="{{ $isMe ? 'text-white' : 'text-gray-700 dark:text-gray-300' }}">
+                                                    {{ $line }}</div>
+                                            @endif
+                                        @else
+                                            <div
+                                                class="{{ $isMe ? 'text-white' : 'text-gray-700 dark:text-gray-300' }}">
+                                                {{ $line }}</div>
+                                        @endif
+                                    @endforeach
+                                </div>
+                            @else
+                                <div class="whitespace-pre-wrap">{{ $msg['message'] }}</div>
+                            @endif
+                        @endif
+                        {{-- End of Teks --}}
 
-                {{-- Time Stamp --}}
-                <div class="flex justify-end items-center gap-1 mt-1 select-none opacity-80">
-                    <span class="text-[10px] {{ $isMe ? 'text-indigo-100' : 'text-gray-400' }}">
-                        {{ \Carbon\Carbon::parse($msg['created_at'])->format('H:i') }}
-                    </span>
-                    @if ($isMe)
-                        {{-- Icon Read Check (Double Tick) --}}
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                            class="w-3 h-3 {{ $msg['is_read'] ? 'text-blue-300' : 'text-indigo-400' }}">
-                            <path fill-rule="evenodd"
-                                d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                                clip-rule="evenodd" />
-                        </svg>
-                    @endif
+                        {{-- IMAGE DISPLAY --}}
+                        @if (!empty($msg['image_path']))
+                            <div class="mt-2">
+                                <img src="{{ asset('storage/' . $msg['image_path']) }}" alt="Chat image"
+                                    @click="selectedImage = '{{ asset('storage/' . $msg['image_path']) }}'; showImageModal = true"
+                                    class="max-w-xs max-h-64 rounded-lg cursor-pointer hover:opacity-80 transition-opacity shadow-md object-cover">
+                            </div>
+                        @endif
+                        {{-- End of Image --}}
+
+                        {{-- Time Stamp --}}
+                        <div class="flex justify-end items-center gap-1 mt-1 select-none opacity-80">
+                            <span class="text-[10px] {{ $isMe ? 'text-indigo-100' : 'text-gray-400' }}">
+                                {{ \Carbon\Carbon::parse($msg['created_at'])->format('H:i') }}
+                            </span>
+                            @if ($isMe)
+                                {{-- Icon Read Check (Double Tick) --}}
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                    class="w-3 h-3 {{ $msg['is_read'] ? 'text-blue-300' : 'text-indigo-400' }}">
+                                    <path fill-rule="evenodd"
+                                        d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            @endif
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-@endforeach
+        @endforeach
     </div>
 
     {{-- Script untuk Auto-Scroll --}}
