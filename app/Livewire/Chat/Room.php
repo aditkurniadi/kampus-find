@@ -22,8 +22,11 @@ class Room extends Component
     {
         $this->lostItem = LostItem::with('category')->findOrFail($id);
 
-        // Cek akses
-        if (auth()->user()->role !== 'superadmin' && auth()->user()->role !== 'keamanan' && auth()->id() !== $this->lostItem->user_id) {
+        // Cekk Akses
+        $isOwner = (int)auth()->id() === (int)$this->lostItem->user_id; // <-- Perbaikan type casting
+        $isAdmin = in_array(auth()->user()->role, ['superadmin', 'keamanan']);
+
+        if (!$isAdmin && !$isOwner) {
             abort(403);
         }
 
