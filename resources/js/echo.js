@@ -1,29 +1,27 @@
 import Echo from 'laravel-echo';
-
 import Pusher from 'pusher-js';
 window.Pusher = Pusher;
 
-// 1. Deteksi Lingkungan Lokal untuk Pengujian (WS vs WSS)
-const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-const scheme = isLocalhost ? 'ws' : 'wss';
+// Tentukan apakah kita menggunakan HTTPS di domain ini
+const isSecure = window.location.protocol === 'https:';
 
 window.Echo = new Echo({
-    // 2. Ganti Driver ke Pusher
-    broadcaster: 'pusher', 
+    broadcaster: 'pusher',
     
-    // 3. Gunakan Variabel Pusher
+    // ❗ KRITIS: Pastikan variabel VITE_PUSHER_APP_KEY sudah didefinisikan di .env
     key: import.meta.env.VITE_PUSHER_APP_KEY,
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
     
-    // 4. Pengaturan Protokol (KRITIS)
-    // Jika di localhost, forceTLS: false (koneksi tidak aman)
-    forceTLS: !isLocalhost, 
+    // Protokol
+    // Gunakan WSS (secure) jika domain saat ini adalah HTTPS.
+    forceTLS: isSecure, 
+    
+    // Jika perlu, Anda bisa menambahkan opsi host eksplisit (optional, Pusher biasanya auto-resolve)
+    // wsHost: 'ws-' + import.meta.env.VITE_PUSHER_APP_CLUSTER + '.pusher.com',
 
-    // Opsi tambahan untuk memastikan koneksi yang bersih
     encrypted: true, 
-    // host dan port tidak perlu disetel jika cluster sudah disetel dan forceTLS disetel false/true dengan benar.
-
-    // Auth settings (Tetap sama, ini sudah benar untuk Private Channel)
+    enabledTransports: ['ws', 'wss'],
+    
     authEndpoint: '/broadcasting/auth',
     auth: {
         headers: {
@@ -31,5 +29,4 @@ window.Echo = new Echo({
             'Accept': 'application/json',
         },
     },
-    enabledTransports: ['ws', 'wss'],
 });
