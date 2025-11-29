@@ -52,7 +52,7 @@
                 </div>
                 <div class="relative flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Kasus Selesai</p>
+                        <p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Laporan Selesai</p>
                         <p class="mt-1 text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
                             {{ $mySolvedReports ?? 0 }}</p>
                     </div>
