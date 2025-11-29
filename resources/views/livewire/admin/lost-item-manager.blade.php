@@ -58,13 +58,16 @@
                                     {{-- TOMBOL CHAT --}}
                                     <a href="{{ route('chat.room', $item->id) }}"
                                         class="inline-flex items-center gap-2 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                                        </svg>
+                                        <!-- ...existing icon... -->
                                         Hubungi
                                     </a>
+
+                                    {{-- TOMBOL HAPUS (pakai modal konfirmasi) --}}
+                                    <button wire:click="confirmDelete({{ $item->id }})"
+                                        class="inline-flex items-center gap-2 px-3 py-2 ml-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg transition">
+                                        <!-- ...existing icon... -->
+                                        Hapus
+                                    </button>
                                 </td>
                             </tr>
                         @empty
@@ -82,6 +85,50 @@
                         @endforelse
                     </tbody>
                 </table>
+
+                {{-- Modal Konfirmasi Hapus --}}
+                <div x-data="{ open: @entangle('showDeleteModal') }" x-cloak>
+                    <div x-show="open" x-transition.opacity class="fixed inset-0 bg-black/50 z-40"></div>
+
+                    <div x-show="open" x-transition class="fixed inset-0 z-50 flex items-center justify-center p-4">
+                        <div @keydown.escape="open = false; $wire.set('showDeleteModal', false)" x-trap.noscroll="open"
+                            class="w-full max-w-lg bg-white dark:bg-zinc-900 rounded-lg shadow-xl border border-gray-200 dark:border-zinc-700 overflow-hidden">
+                            <div class="p-6">
+                                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Hapus Laporan</h3>
+                                <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                                    Yakin ingin menghapus laporan ini beserta semua chat dan foto terkait? Tindakan ini
+                                    tidak dapat dikembalikan.
+                                </p>
+
+                                {{-- Optional: tampilkan nama item --}}
+                                @if ($deleteId)
+                                    @php $delItem = \App\Models\LostItem::find($deleteId); @endphp
+                                    @if ($delItem)
+                                        <div class="mt-4 p-3 bg-gray-50 dark:bg-zinc-800 rounded">
+                                            <div class="text-sm font-semibold text-gray-800 dark:text-gray-100">
+                                                {{ $delItem->item_name }}</div>
+                                            <div class="text-xs text-gray-500 dark:text-gray-400">
+                                                {{ $delItem->location }}</div>
+                                        </div>
+                                    @endif
+                                @endif
+                            </div>
+
+                            <div class="flex justify-end gap-3 p-4 border-t border-gray-100 dark:border-zinc-800">
+                                <button type="button" @click="open = false; $wire.set('showDeleteModal', false)"
+                                    class="px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-sm font-medium">
+                                    Batal
+                                </button>
+
+                                <button type="button" wire:click="deleteItem" wire:loading.attr="disabled"
+                                    class="px-4 py-2 rounded-md bg-red-600 hover:bg-red-700 text-white text-sm font-bold">
+                                    Hapus Sekarang
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="p-4">{{ $items->links() }}</div>
             </div>
         </div>
