@@ -1,0 +1,36 @@
+[01-Dec-2025 02:19:54 UTC] PHP Warning:  require(/home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/../../app/Helpers/SiteHelper.php): Failed to open stream: No such file or directory in /home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/autoload_real.php on line 41
+[01-Dec-2025 02:19:54 UTC] PHP Warning:  require(/home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/../../app/Helpers/SiteHelper.php): Failed to open stream: No such file or directory in /home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/autoload_real.php on line 41
+[01-Dec-2025 02:19:54 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/../../app/Helpers/SiteHelper.php' (include_path='.:/opt/alt/php84/usr/share/pear:/opt/alt/php84/usr/share/php:/usr/share/pear:/usr/share/php') in /home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/autoload_real.php(45): {closure:ComposerAutoloaderInit0df930e48f5b3ff221e5568fc4b7cd56::getLoader():37}()
+#1 /home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/autoload.php(22): ComposerAutoloaderInit0df930e48f5b3ff221e5568fc4b7cd56::getLoader()
+#2 /home/iowceiwn/kampus-find-mirror.aditcom.my.id/public/index.php(14): require('/home/iowceiwn/...')
+#3 {main}
+  thrown in /home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/autoload_real.php on line 41
+[01-Dec-2025 02:19:56 UTC] PHP Warning:  require(/home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/../../app/Helpers/SiteHelper.php): Failed to open stream: No such file or directory in /home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/autoload_real.php on line 41
+[01-Dec-2025 02:19:56 UTC] PHP Warning:  require(/home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/../../app/Helpers/SiteHelper.php): Failed to open stream: No such file or directory in /home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/autoload_real.php on line 41
+[01-Dec-2025 02:19:56 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/../../app/Helpers/SiteHelper.php' (include_path='.:/opt/alt/php84/usr/share/pear:/opt/alt/php84/usr/share/php:/usr/share/pear:/usr/share/php') in /home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/autoload_real.php(45): {closure:ComposerAutoloaderInit0df930e48f5b3ff221e5568fc4b7cd56::getLoader():37}()
+#1 /home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/autoload.php(22): ComposerAutoloaderInit0df930e48f5b3ff221e5568fc4b7cd56::getLoader()
+#2 /home/iowceiwn/kampus-find-mirror.aditcom.my.id/public/index.php(14): require('/home/iowceiwn/...')
+#3 {main}
+  thrown in /home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/autoload_real.php on line 41
+[01-Dec-2025 02:20:16 UTC] PHP Warning:  require(/home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/../../app/Helpers/SiteHelper.php): Failed to open stream: No such file or directory in /home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/autoload_real.php on line 41
+[01-Dec-2025 02:20:16 UTC] PHP Warning:  require(/home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/../../app/Helpers/SiteHelper.php): Failed to open stream: No such file or directory in /home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/autoload_real.php on line 41
+[01-Dec-2025 02:20:16 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/../../app/Helpers/SiteHelper.php' (include_path='.:/opt/alt/php84/usr/share/pear:/opt/alt/php84/usr/share/php:/usr/share/pear:/usr/share/php') in /home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/autoload_real.php(45): {closure:ComposerAutoloaderInit0df930e48f5b3ff221e5568fc4b7cd56::getLoader():37}()
+#1 /home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/autoload.php(22): ComposerAutoloaderInit0df930e48f5b3ff221e5568fc4b7cd56::getLoader()
+#2 /home/iowceiwn/kampus-find-mirror.aditcom.my.id/public/index.php(14): require('/home/iowceiwn/...')
+#3 {main}
+  thrown in /home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/autoload_real.php on line 41
+[01-Dec-2025 02:20:18 UTC] PHP Warning:  require(/home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/../../app/Helpers/SiteHelper.php): Failed to open stream: No such file or directory in /home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/autoload_real.php on line 41
+[01-Dec-2025 02:20:18 UTC] PHP Warning:  require(/home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/../../app/Helpers/SiteHelper.php): Failed to open stream: No such file or directory in /home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/autoload_real.php on line 41
+[01-Dec-2025 02:20:18 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/../../app/Helpers/SiteHelper.php' (include_path='.:/opt/alt/php84/usr/share/pear:/opt/alt/php84/usr/share/php:/usr/share/pear:/usr/share/php') in /home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/autoload_real.php(45): {closure:ComposerAutoloaderInit0df930e48f5b3ff221e5568fc4b7cd56::getLoader():37}()
+#1 /home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/autoload.php(22): ComposerAutoloaderInit0df930e48f5b3ff221e5568fc4b7cd56::getLoader()
+#2 /home/iowceiwn/kampus-find-mirror.aditcom.my.id/public/index.php(14): require('/home/iowceiwn/...')
+#3 {main}
+  thrown in /home/iowceiwn/kampus-find-mirror.aditcom.my.id/vendor/composer/autoload_real.php on line 41
