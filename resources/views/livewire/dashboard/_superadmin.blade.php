@@ -89,6 +89,11 @@
                 </div>
             </div>
 
+            <flux:button wire:click="toggleMaintenance" icon="wrench-screwdriver" class="w-full justify-start"
+                wire:confirm="Yakin ingin mengubah status Maintenance Mode? User biasa tidak akan bisa mengakses web.">
+                Toggle Maintenance Mode
+            </flux:button>
+
         </div>
 
 

@@ -2,14 +2,15 @@
 
 namespace App\Livewire;
 
+use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Setting;
 use Livewire\Component;
 use App\Models\Feedback;
 use App\Models\categories;
 use App\Models\found_items;
 use Livewire\Attributes\On;
 use App\Models\Announcement;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class Dashboard extends Component
@@ -118,6 +119,27 @@ class Dashboard extends Component
                 ->take(5)
                 ->get();
         }
+    }
+
+    public function toggleMaintenance()
+    {
+        // Hanya superadmin yang boleh
+        if (auth()->user()->role !== 'superadmin') {
+            abort(403);
+        }
+
+        $setting = Setting::firstOrCreate(['key' => 'maintenance_mode']);
+
+        // Toggle True/False
+        $newValue = ($setting->value === 'true') ? 'false' : 'true';
+        $setting->update(['value' => $newValue]);
+
+        // Hapus cache agar efeknya langsung terasa
+        cache()->forget('maintenance_mode');
+
+        // Notifikasi
+        $status = $newValue === 'true' ? 'AKTIF' : 'NON-AKTIF';
+        $this->dispatch('show-toast', type: 'warning', message: "Maintenance Mode: $status");
     }
 
     #[On('user-updated')]
