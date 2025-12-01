@@ -89,9 +89,10 @@
                 </div>
             </div>
 
-            <flux:button wire:click="toggleMaintenance" icon="wrench-screwdriver" class="w-full justify-start"
-                wire:confirm="Yakin ingin mengubah status Maintenance Mode? User biasa tidak akan bisa mengakses web.">
-                Toggle Maintenance Mode
+            <flux:button wire:click="confirmMaintenanceToggle" variant="{{ $isMaintenanceOn ? 'danger' : 'filled' }}"
+                icon="{{ $isMaintenanceOn ? 'lock-open' : 'lock-closed' }}"
+                class="w-full justify-start {{ $isMaintenanceOn ? 'bg-red-600 hover:bg-red-700 text-white' : '' }}">
+                {{ $isMaintenanceOn ? 'Matikan Maintenance' : 'Aktifkan Maintenance' }}
             </flux:button>
 
         </div>
@@ -236,6 +237,72 @@
                 </table>
             </div>
         </div>
+
+        {{-- MODAL KONFIRMASI PASSWORD --}}
+        <flux:modal wire:model="confirmingMaintenance" class="min-w-[22rem]">
+            <form wire:submit="toggleMaintenance" class="space-y-6">
+                <div>
+                    <div
+                        class="mb-4 flex h-12 w-12 items-center justify-center rounded-full {{ $isMaintenanceOn ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600' }}">
+                        <flux:icon name="{{ $isMaintenanceOn ? 'lock-open' : 'lock-closed' }}" class="h-6 w-6" />
+                    </div>
+
+                    <flux:heading size="lg">
+                        {{ $isMaintenanceOn ? 'Matikan Mode Maintenance?' : 'Aktifkan Mode Maintenance?' }}
+                    </flux:heading>
+
+                    <flux:subheading class="mt-2">
+                        @if ($isMaintenanceOn)
+                            Website akan dapat diakses kembali oleh seluruh pengguna (Mahasiswa & Tamu).
+                        @else
+                            Website akan <strong>dikunci</strong>. Hanya Admin yang bisa mengakses dashboard. User lain
+                            akan melihat halaman perbaikan.
+                        @endif
+                    </flux:subheading>
+                </div>
+
+                {{-- LOGIKA INPUT PASSWORD / GOOGLE --}}
+                @if (empty(auth()->user()->google_id))
+                    {{-- CASE 1: USER BIASA (Wajib Password) --}}
+                    <flux:field>
+                        <flux:label>Konfirmasi Password</flux:label>
+                        <flux:input type="password" wire:model="passwordConfirmation"
+                            placeholder="Masukkan password admin..." autofocus />
+                        <flux:error name="passwordConfirmation" />
+                    </flux:field>
+                @else
+                    {{-- CASE 2: USER GOOGLE (Bypass Password) --}}
+                    <div
+                        class="rounded-md bg-blue-50 p-4 border border-blue-100 dark:bg-blue-900/20 dark:border-blue-800">
+                        <div class="flex">
+                            <div class="shrink-0">
+                                {{-- G Logo --}}
+                                <svg class="h-5 w-5 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-sm font-bold text-blue-800 dark:text-blue-200">Verifikasi Akun Google
+                                </h3>
+                                <p class="mt-1 text-xs text-blue-700 dark:text-blue-300">
+                                    Anda login sebagai <strong>{{ auth()->user()->name }}</strong> via Google. Tidak
+                                    perlu password untuk konfirmasi.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                <div class="flex justify-end gap-2 pt-4">
+                    <flux:button variant="ghost" wire:click="$set('confirmingMaintenance', false)">Batal</flux:button>
+
+                    <flux:button type="submit" variant="{{ $isMaintenanceOn ? 'primary' : 'danger' }}">
+                        {{ $isMaintenanceOn ? 'Ya, Matikan Sekarang' : 'Ya, Aktifkan Sekarang' }}
+                    </flux:button>
+                </div>
+            </form>
+        </flux:modal>
 
     </div>
 

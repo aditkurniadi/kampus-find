@@ -12,6 +12,8 @@ use App\Models\found_items;
 use Livewire\Attributes\On;
 use App\Models\Announcement;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class Dashboard extends Component
 {
@@ -37,6 +39,10 @@ class Dashboard extends Component
 
     public $recentActivities;
 
+    public $confirmingMaintenance = false; // Untuk kontrol modal
+    public $passwordConfirmation = '';
+    public $isMaintenanceOn = false;
+
     public function mount(): void
     {
         $this->totalUsers = User::count();
@@ -54,6 +60,9 @@ class Dashboard extends Component
             ->latest()
             ->take(3) // <-- [DIUBAH] Ambil 3 data
             ->get();
+
+        $setting = Setting::where('key', 'maintenance_mode')->first();
+        $this->isMaintenanceOn = $setting && $setting->value === 'true';
 
         for ($i = 6; $i >= 0; $i--) {
             $date = Carbon::today()->subDays($i);
@@ -121,25 +130,52 @@ class Dashboard extends Component
         }
     }
 
+    public function confirmMaintenanceToggle()
+    {
+        $this->confirmingMaintenance = true;
+        $this->passwordConfirmation = ''; // Reset inputan
+    }
+
     public function toggleMaintenance()
     {
-        // Hanya superadmin yang boleh
-        if (auth()->user()->role !== 'superadmin') {
-            abort(403);
+        $user = auth()->user();
+
+        // 1. LOGIKA VALIDASI
+        // Jika google_id KOSONG, berarti User Biasa -> Wajib isi Password
+        if (empty($user->google_id)) {
+            $this->validate([
+                'passwordConfirmation' => 'required',
+            ]);
+
+            if (!Hash::check($this->passwordConfirmation, $user->password)) {
+                throw ValidationException::withMessages([
+                    'passwordConfirmation' => __('Password yang Anda masukkan salah.'),
+                ]);
+            }
         }
 
+        // 2. EKSEKUSI TOGGLE
         $setting = Setting::firstOrCreate(['key' => 'maintenance_mode']);
 
-        // Toggle True/False
+        // Balik nilai saat ini
         $newValue = ($setting->value === 'true') ? 'false' : 'true';
         $setting->update(['value' => $newValue]);
 
-        // Hapus cache agar efeknya langsung terasa
+        // 3. Update Status Lokal (Agar UI langsung berubah warna)
+        $this->isMaintenanceOn = ($newValue === 'true');
+
         cache()->forget('maintenance_mode');
 
-        // Notifikasi
-        $status = $newValue === 'true' ? 'AKTIF' : 'NON-AKTIF';
-        $this->dispatch('show-toast', type: 'warning', message: "Maintenance Mode: $status");
+        $this->confirmingMaintenance = false;
+        $this->passwordConfirmation = '';
+
+        $statusLabel = $this->isMaintenanceOn ? 'AKTIF' : 'NON-AKTIF';
+
+        $this->dispatch(
+            'show-toast',
+            type: $this->isMaintenanceOn ? 'error' : 'success', // Merah jika aktif, Hijau jika mati
+            message: "Maintenance Mode berhasil diubah menjadi: $statusLabel"
+        );
     }
 
     #[On('user-updated')]

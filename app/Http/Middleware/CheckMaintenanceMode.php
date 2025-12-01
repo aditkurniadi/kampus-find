@@ -34,11 +34,14 @@ class CheckMaintenanceMode
         // (Penting agar halaman login tidak ikut terblokir)
         if (
             $request->routeIs('login') ||
+            $request->is('login') ||      // <--- TAMBAHAN: Izinkan URL /login (untuk POST)
             $request->routeIs('logout') ||
+            $request->is('logout') ||     // <--- TAMBAHAN: Izinkan URL /logout
             $request->is('livewire/*') ||
             $request->is('flux/*') ||
             $request->is('auth/google*')
-        ) { // Tambahan jika pakai Flux assets
+        ) {
+
             return $next($request);
         }
 
