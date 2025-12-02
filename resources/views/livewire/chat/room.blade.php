@@ -69,10 +69,18 @@
     <div id="chat-container"
         class="flex-1 min-h-0 overflow-y-auto p-4 sm:p-6 space-y-6 bg-[#f0f2f5] dark:bg-[#0b0b0b] relative scroll-smooth"
         x-data="{
-            // ... AlpineJS functions ...
+            scrollBottom() {
+                // Menggunakan ID untuk referensi elemen yang andal
+                const container = document.getElementById('chat-container');
+                if (container) {
+                    setTimeout(() => {
+                        container.scrollTop = container.scrollHeight;
+                    }, 50); // 50ms untuk memastikan DOM sudah terupdate
+                }
+            }
         }" x-init="scrollBottom()" @chat-scroll.window="scrollBottom()">
 
-        {{-- Background Pattern (Titik-titik halus) --}}
+        {{-- Background Pattern --}}
         <div class="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none"
             style="background-image: radial-gradient(#6366f1 1px, transparent 1px); background-size: 24px 24px;">
         </div>
@@ -102,19 +110,17 @@
                     }
                 }
 
-                // --- LOGIKA CHAT BUBBLE (Sisanya tetap) ---
+                // --- LOGIKA CHAT BUBBLE ---
                 $currentAuthId = (int) auth()->id();
                 $senderId = (int) $msg['sender_id'];
-                $isMe = $senderId === $currentAuthId;
+                $isMe = $senderId === $currentAuthId; // Menentukan posisi gelembung
 
                 $senderRole = $msg['sender']['role'] ?? 'mahasiswa';
                 $senderName = $msg['sender']['name'];
 
                 if (in_array($senderRole, ['superadmin', 'keamanan'])) {
                     $senderName = 'Admin Kampus';
-                } elseif ($isMe) {
-                    // Jika saya (Mahasiswa) adalah pengirim, tidak perlu tampilkan nama di atas bubble saya.
-                } else {
+                } elseif (!$isMe) {
                     $senderName = $msg['sender']['name'];
                 }
 
@@ -152,7 +158,7 @@
                         </span>
                     @endif
 
-                    {{-- 3. Bubble Chat (Sisanya) --}}
+                    {{-- 3. Bubble Chat (Utama) --}}
                     <div
                         class="px-4 py-2.5 shadow-sm text-[15px] leading-relaxed break-words relative transition-all
                         {{ $isMe
@@ -162,7 +168,6 @@
 
                         {{-- Pesan Teks (jika ada) --}}
                         @if (!empty($msg['message']))
-                            {{-- ... (Logika Pesan Auto-Send/Teks biasa) ... --}}
                             @if ($isAutoMessage)
                                 {{-- Styling khusus untuk pesan auto-send --}}
                                 <div class="text-sm leading-relaxed space-y-1.5">
@@ -209,7 +214,7 @@
                             @endif
                         @endif
 
-                        {{-- IMAGE DISPLAY (tetap di sini) --}}
+                        {{-- IMAGE DISPLAY --}}
                         @if (!empty($msg['image_path']))
                             <div class="mt-2">
                                 <img src="{{ asset('storage/' . $msg['image_path']) }}" alt="Chat image"
@@ -218,7 +223,7 @@
                             </div>
                         @endif
 
-                        {{-- Time Stamp (Waktu sudah dikonversi) --}}
+                        {{-- Time Stamp --}}
                         <div class="flex justify-end items-center gap-1 mt-1 select-none opacity-80">
                             <span class="text-[10px] {{ $isMe ? 'text-indigo-100' : 'text-gray-400' }}">
                                 {{ \Carbon\Carbon::parse($msg['created_at'])->setTimezone('Asia/Jakarta')->format('H:i') }}
@@ -267,7 +272,8 @@
             }
         });
 
-        // ===== PUSHER REAL-TIME LISTENER =====
+        // ===== PUSHER REAL-TIME LISTENER (Pastikan ini ada di layout utama, bukan di sini) =====
+        // Ini adalah Listener Blade yang akan di-render di halaman.
         if (window.Echo) {
             Echo.private('chat.{{ $lostItem->id }}')
                 .listen('MessageSent', (data) => {
