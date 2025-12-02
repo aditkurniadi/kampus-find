@@ -69,12 +69,7 @@
     <div id="chat-container"
         class="flex-1 min-h-0 overflow-y-auto p-4 sm:p-6 space-y-6 bg-[#f0f2f5] dark:bg-[#0b0b0b] relative scroll-smooth"
         x-data="{
-            scrollBottom() {
-                const container = this.$el;
-                setTimeout(() => {
-                    container.scrollTop = container.scrollHeight;
-                }, 100);
-            }
+            // ... AlpineJS functions ...
         }" x-init="scrollBottom()" @chat-scroll.window="scrollBottom()">
 
         {{-- Background Pattern (Titik-titik halus) --}}
@@ -82,31 +77,59 @@
             style="background-image: radial-gradient(#6366f1 1px, transparent 1px); background-size: 24px 24px;">
         </div>
 
+        @php $previousDate = null; @endphp {{-- Inisialisasi pelacak tanggal --}}
+
         @foreach ($messages as $msg)
             @php
-                // 🚨 PERBAIKAN KRITIS: Lakukan Type Casting (int) untuk memastikan perbandingan ID
+                // --- LOGIKA DATE SEPARATOR ---
+                $currentTimestamp = \Carbon\Carbon::parse($msg['created_at'])->setTimezone('Asia/Jakarta');
+                $currentDate = $currentTimestamp->toDateString(); // Format YYYY-MM-DD
+
+                $showSeparator = false;
+                $dateLabel = '';
+
+                // Tampilkan separator jika tanggal saat ini berbeda dari tanggal sebelumnya
+                if ($previousDate !== $currentDate) {
+                    $showSeparator = true;
+
+                    if ($currentTimestamp->isToday()) {
+                        $dateLabel = 'HARI INI';
+                    } elseif ($currentTimestamp->isYesterday()) {
+                        $dateLabel = 'KEMARIN';
+                    } else {
+                        // Format penuh (misal: 25 November 2025)
+                        $dateLabel = $currentTimestamp->isoFormat('D MMMM YYYY');
+                    }
+                }
+
+                // --- LOGIKA CHAT BUBBLE (Sisanya tetap) ---
                 $currentAuthId = (int) auth()->id();
                 $senderId = (int) $msg['sender_id'];
-                $isMe = $senderId === $currentAuthId; // Menentukan posisi gelembung
+                $isMe = $senderId === $currentAuthId;
 
-                // Logika Nama Pengirim
                 $senderRole = $msg['sender']['role'] ?? 'mahasiswa';
                 $senderName = $msg['sender']['name'];
 
-                // Jika pengirim adalah Admin/Keamanan
                 if (in_array($senderRole, ['superadmin', 'keamanan'])) {
                     $senderName = 'Admin Kampus';
                 } elseif ($isMe) {
                     // Jika saya (Mahasiswa) adalah pengirim, tidak perlu tampilkan nama di atas bubble saya.
-                    // (Kita biarkan variabelnya terisi, tapi hanya dipakai saat $isMe = false)
                 } else {
-                    // Jika pengirim adalah Mahasiswa lain, tampilkan namanya
                     $senderName = $msg['sender']['name'];
                 }
 
-                // Deteksi apakah ini pesan auto-send (info barang)
                 $isAutoMessage = str_contains($msg['message'] ?? '', '📋 Informasi Barang Hilang');
             @endphp
+
+            {{-- TAMPILKAN SEPARATOR TANGGAL --}}
+            @if ($showSeparator)
+                <div class="flex justify-center my-4 select-none">
+                    <span
+                        class="text-[10px] font-medium uppercase px-3 py-1 rounded-full bg-gray-200 text-gray-600 dark:bg-zinc-700 dark:text-gray-300 shadow-sm">
+                        {{ $dateLabel }}
+                    </span>
+                </div>
+            @endif
 
             {{-- 1. Posisi Gelembung: justify-end (kanan) jika $isMe TRUE --}}
             <div class="flex w-full {{ $isMe ? 'justify-end' : 'justify-start' }} relative z-0 group">
@@ -132,13 +155,14 @@
                     {{-- 3. Bubble Chat (Sisanya) --}}
                     <div
                         class="px-4 py-2.5 shadow-sm text-[15px] leading-relaxed break-words relative transition-all
-                {{ $isMe
-                    ? 'bg-indigo-600 text-white rounded-2xl rounded-tr-none'
-                    : 'bg-white dark:bg-zinc-800 dark:text-gray-100 text-gray-800 rounded-2xl rounded-tl-none border border-gray-100 dark:border-zinc-700' }}
-                {{ $isAutoMessage ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800' : '' }}">
+                        {{ $isMe
+                            ? 'bg-indigo-600 text-white rounded-2xl rounded-tr-none'
+                            : 'bg-white dark:bg-zinc-800 dark:text-gray-100 text-gray-800 rounded-2xl rounded-tl-none border border-gray-100 dark:border-zinc-700' }}
+                        {{ $isAutoMessage ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800' : '' }}">
 
                         {{-- Pesan Teks (jika ada) --}}
                         @if (!empty($msg['message']))
+                            {{-- ... (Logika Pesan Auto-Send/Teks biasa) ... --}}
                             @if ($isAutoMessage)
                                 {{-- Styling khusus untuk pesan auto-send --}}
                                 <div class="text-sm leading-relaxed space-y-1.5">
@@ -184,9 +208,8 @@
                                 <div class="whitespace-pre-wrap">{{ $msg['message'] }}</div>
                             @endif
                         @endif
-                        {{-- End of Teks --}}
 
-                        {{-- IMAGE DISPLAY --}}
+                        {{-- IMAGE DISPLAY (tetap di sini) --}}
                         @if (!empty($msg['image_path']))
                             <div class="mt-2">
                                 <img src="{{ asset('storage/' . $msg['image_path']) }}" alt="Chat image"
@@ -194,9 +217,8 @@
                                     class="max-w-xs max-h-64 rounded-lg cursor-pointer hover:opacity-80 transition-opacity shadow-md object-cover">
                             </div>
                         @endif
-                        {{-- End of Image --}}
 
-                        {{-- Time Stamp --}}
+                        {{-- Time Stamp (Waktu sudah dikonversi) --}}
                         <div class="flex justify-end items-center gap-1 mt-1 select-none opacity-80">
                             <span class="text-[10px] {{ $isMe ? 'text-indigo-100' : 'text-gray-400' }}">
                                 {{ \Carbon\Carbon::parse($msg['created_at'])->setTimezone('Asia/Jakarta')->format('H:i') }}
@@ -213,6 +235,8 @@
                     </div>
                 </div>
             </div>
+
+            @php $previousDate = $currentDate; @endphp {{-- Simpan tanggal untuk iterasi berikutnya --}}
         @endforeach
     </div>
 
