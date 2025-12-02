@@ -199,10 +199,9 @@
                         {{-- Time Stamp --}}
                         <div class="flex justify-end items-center gap-1 mt-1 select-none opacity-80">
                             <span class="text-[10px] {{ $isMe ? 'text-indigo-100' : 'text-gray-400' }}">
-                                {{ \Carbon\Carbon::parse($msg['created_at'])->format('H:i') }}
+                                {{ \Carbon\Carbon::parse($msg['created_at'])->setTimezone('Asia/Jakarta')->format('H:i') }}
                             </span>
                             @if ($isMe)
-                                {{-- Icon Read Check (Double Tick) --}}
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                     class="w-3 h-3 {{ $msg['is_read'] ? 'text-blue-300' : 'text-indigo-400' }}">
                                     <path fill-rule="evenodd"
