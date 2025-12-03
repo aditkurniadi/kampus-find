@@ -134,129 +134,6 @@
         </div>
     </div>
 
-    {{-- ========================================== --}}
-    {{-- SECTION 3: FEEDBACK CAROUSEL (NEW)         --}}
-    {{-- ========================================== --}}
-    <section
-        class="py-24 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 transition-colors duration-300">
-        <div class="mx-auto max-w-7xl px-6 lg:px-8">
-
-            {{-- Header Section --}}
-            <div class="mx-auto max-w-2xl text-center mb-16">
-                <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl dark:text-white">Apa Kata Mereka?
-                </h2>
-                <p class="mt-2 text-lg leading-8 text-gray-600 dark:text-gray-300">
-                    Pengalaman pengguna lain menggunakan layanan Kampus Find.
-                </p>
-
-                @if (isset($averageRating) && $averageRating > 0)
-                    <div class="mt-4 flex items-center justify-center gap-2">
-                        <span class="text-3xl font-black text-yellow-500">{{ number_format($averageRating, 1) }}</span>
-                        <div class="flex text-yellow-400">
-                            @for ($i = 0; $i < 5; $i++)
-                                <svg class="w-6 h-6 {{ $i < round($averageRating) ? 'fill-current' : 'text-gray-300 dark:text-gray-600' }}"
-                                    viewBox="0 0 20 20" fill="currentColor">
-                                    <path
-                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                            @endfor
-                        </div>
-                    </div>
-                @endif
-            </div>
-
-            {{-- Carousel Container --}}
-            {{-- Menggunakan x-data AlpineJS untuk kontrol tombol Kiri/Kanan --}}
-            <div x-data="{
-                scrollLeft() { $refs.scroller.scrollBy({ left: -320, behavior: 'smooth' }) },
-                    scrollRight() { $refs.scroller.scrollBy({ left: 320, behavior: 'smooth' }) }
-            }" class="relative group">
-
-                {{-- Tombol Previous (Hanya muncul di desktop saat hover) --}}
-                <button @click="scrollLeft()"
-                    class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 bg-white dark:bg-gray-700 rounded-full shadow-lg items-center justify-center text-gray-600 dark:text-white hover:bg-indigo-50 dark:hover:bg-gray-600 transition-opacity opacity-0 group-hover:opacity-100">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                        stroke="currentColor" class="w-5 h-5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                    </svg>
-                </button>
-
-                {{-- Scroll Area --}}
-                <div x-ref="scroller"
-                    class="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory no-scrollbar scroll-smooth">
-
-                    @if ($feedbacks->count() > 0)
-                        @foreach ($feedbacks as $feedback)
-                            {{-- Item Card --}}
-                            <div
-                                class="snap-center shrink-0 w-[300px] md:w-[350px] flex flex-col justify-between p-6 bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow">
-                                <div>
-                                    {{-- Header Card: Avatar & Nama --}}
-                                    <div class="flex items-center gap-4 mb-4">
-                                        <div
-                                            class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center font-bold text-indigo-600 dark:text-indigo-300">
-                                            {{ substr($feedback->user->name ?? 'A', 0, 1) }}
-                                        </div>
-                                        <div>
-                                            <h4 class="font-semibold text-gray-900 dark:text-white text-sm">
-                                                {{ $feedback->user->name ?? 'Anonim' }}
-                                            </h4>
-                                            <span
-                                                class="text-xs text-gray-500">{{ $feedback->created_at->diffForHumans() }}</span>
-                                        </div>
-                                    </div>
-
-                                    {{-- Stars --}}
-                                    <div class="flex text-yellow-400 mb-3">
-                                        @for ($i = 0; $i < 5; $i++)
-                                            @if ($i < $feedback->rating)
-                                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                                                    <path
-                                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                                </svg>
-                                            @else
-                                                <svg class="w-4 h-4 text-gray-300 dark:text-gray-600 fill-current"
-                                                    viewBox="0 0 20 20">
-                                                    <path
-                                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                                </svg>
-                                            @endif
-                                        @endfor
-                                    </div>
-
-                                    {{-- Message --}}
-                                    <p class="text-gray-600 dark:text-gray-300 text-sm italic line-clamp-3">
-                                        "{{ $feedback->message }}"
-                                    </p>
-                                </div>
-                            </div>
-                        @endforeach
-                    @else
-                        {{-- Fallback jika belum ada ulasan --}}
-                        <div class="w-full text-center py-10">
-                            <p class="text-gray-500 italic">Belum ada ulasan saat ini. Jadilah yang pertama!</p>
-                            <a href="{{ route('feedback') }}"
-                                class="mt-4 inline-block text-indigo-600 font-semibold hover:underline">Beri Ulasan</a>
-                        </div>
-                    @endif
-
-                    {{-- Spacer kanan agar card terakhir tidak mentok --}}
-                    <div class="w-4 shrink-0"></div>
-                </div>
-
-                {{-- Tombol Next --}}
-                <button @click="scrollRight()"
-                    class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 bg-white dark:bg-gray-700 rounded-full shadow-lg items-center justify-center text-gray-600 dark:text-white hover:bg-indigo-50 dark:hover:bg-gray-600 transition-opacity opacity-0 group-hover:opacity-100">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                        stroke="currentColor" class="w-5 h-5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                    </svg>
-                </button>
-
-            </div>
-        </div>
-    </section>
-
     <section class="bg-white dark:bg-gray-900 transition-colors duration-300">
         <div class="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8 lg:py-40">
             <div class="mx-auto max-w-4xl divide-y divide-gray-900/10 dark:divide-white/10">
@@ -377,6 +254,130 @@
                     </div>
 
                 </dl>
+            </div>
+        </div>
+    </section>
+
+    {{-- ========================================== --}}
+    {{-- SECTION 3: FEEDBACK CAROUSEL (NEW)         --}}
+    {{-- ========================================== --}}
+    <section
+        class="py-24 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 transition-colors duration-300">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+
+            {{-- Header Section --}}
+            <div class="mx-auto max-w-2xl text-center mb-16">
+                <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl dark:text-white">Apa Kata
+                    Mereka?
+                </h2>
+                <p class="mt-2 text-lg leading-8 text-gray-600 dark:text-gray-300">
+                    Pengalaman pengguna lain menggunakan layanan Kampus Find.
+                </p>
+
+                @if (isset($averageRating) && $averageRating > 0)
+                    <div class="mt-4 flex items-center justify-center gap-2">
+                        <span class="text-3xl font-black text-yellow-500">{{ number_format($averageRating, 1) }}</span>
+                        <div class="flex text-yellow-400">
+                            @for ($i = 0; $i < 5; $i++)
+                                <svg class="w-6 h-6 {{ $i < round($averageRating) ? 'fill-current' : 'text-gray-300 dark:text-gray-600' }}"
+                                    viewBox="0 0 20 20" fill="currentColor">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                            @endfor
+                        </div>
+                    </div>
+                @endif
+            </div>
+
+            {{-- Carousel Container --}}
+            {{-- Menggunakan x-data AlpineJS untuk kontrol tombol Kiri/Kanan --}}
+            <div x-data="{
+                scrollLeft() { $refs.scroller.scrollBy({ left: -320, behavior: 'smooth' }) },
+                    scrollRight() { $refs.scroller.scrollBy({ left: 320, behavior: 'smooth' }) }
+            }" class="relative group">
+
+                {{-- Tombol Previous (Hanya muncul di desktop saat hover) --}}
+                <button @click="scrollLeft()"
+                    class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 bg-white dark:bg-gray-700 rounded-full shadow-lg items-center justify-center text-gray-600 dark:text-white hover:bg-indigo-50 dark:hover:bg-gray-600 transition-opacity opacity-0 group-hover:opacity-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                        stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                </button>
+
+                {{-- Scroll Area --}}
+                <div x-ref="scroller"
+                    class="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory no-scrollbar scroll-smooth">
+
+                    @if ($feedbacks->count() > 0)
+                        @foreach ($feedbacks as $feedback)
+                            {{-- Item Card --}}
+                            <div
+                                class="snap-center shrink-0 w-[300px] md:w-[350px] flex flex-col justify-between p-6 bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow">
+                                <div>
+                                    {{-- Header Card: Avatar & Nama --}}
+                                    <div class="flex items-center gap-4 mb-4">
+                                        <div
+                                            class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center font-bold text-indigo-600 dark:text-indigo-300">
+                                            {{ substr($feedback->user->name ?? 'A', 0, 1) }}
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold text-gray-900 dark:text-white text-sm">
+                                                {{ $feedback->user->name ?? 'Anonim' }}
+                                            </h4>
+                                            <span
+                                                class="text-xs text-gray-500">{{ $feedback->created_at->diffForHumans() }}</span>
+                                        </div>
+                                    </div>
+
+                                    {{-- Stars --}}
+                                    <div class="flex text-yellow-400 mb-3">
+                                        @for ($i = 0; $i < 5; $i++)
+                                            @if ($i < $feedback->rating)
+                                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                                    <path
+                                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                </svg>
+                                            @else
+                                                <svg class="w-4 h-4 text-gray-300 dark:text-gray-600 fill-current"
+                                                    viewBox="0 0 20 20">
+                                                    <path
+                                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                </svg>
+                                            @endif
+                                        @endfor
+                                    </div>
+
+                                    {{-- Message --}}
+                                    <p class="text-gray-600 dark:text-gray-300 text-sm italic line-clamp-3">
+                                        "{{ $feedback->message }}"
+                                    </p>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        {{-- Fallback jika belum ada ulasan --}}
+                        <div class="w-full text-center py-10">
+                            <p class="text-gray-500 italic">Belum ada ulasan saat ini. Jadilah yang pertama!</p>
+                            <a href="{{ route('feedback') }}"
+                                class="mt-4 inline-block text-indigo-600 font-semibold hover:underline">Beri Ulasan</a>
+                        </div>
+                    @endif
+
+                    {{-- Spacer kanan agar card terakhir tidak mentok --}}
+                    <div class="w-4 shrink-0"></div>
+                </div>
+
+                {{-- Tombol Next --}}
+                <button @click="scrollRight()"
+                    class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 bg-white dark:bg-gray-700 rounded-full shadow-lg items-center justify-center text-gray-600 dark:text-white hover:bg-indigo-50 dark:hover:bg-gray-600 transition-opacity opacity-0 group-hover:opacity-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                        stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                    </svg>
+                </button>
+
             </div>
         </div>
     </section>
