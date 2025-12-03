@@ -144,6 +144,8 @@ class Room extends Component
 
     public function render()
     {
-        return view('livewire.chat.room');
+        return view('livewire.chat.room', [
+            'title' => 'Chat - ' . ($this->lostItem->item_name ?? 'Lost Item'),
+        ]);
     }
 }
