@@ -17,40 +17,37 @@ class CheckMaintenanceMode
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // 1. Ambil status dari Database
-        // Gunakan 'first()' atau 'where' sesuai struktur tabel settings kamu
-        // Asumsi: key='maintenance_mode' dan value='true'/'false'
         $setting = Setting::where('key', 'maintenance_mode')->first();
         $isMaintenance = $setting && $setting->value === 'true';
 
-        // 2. Jika TIDAK maintenance, silakan lewat
         if (!$isMaintenance) {
             return $next($request);
         }
 
-        // --- LOGIKA PENGECUALIAN (WHITELIST) ---
+        if (Auth::check() && Auth::user()->role !== 'superadmin') {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
 
-        // A. Izinkan akses ke Login, Logout, dan aset internal Livewire
-        // (Penting agar halaman login tidak ikut terblokir)
         if (
             $request->routeIs('login') ||
-            $request->is('login') ||      // <--- TAMBAHAN: Izinkan URL /login (untuk POST)
+            $request->is('login') ||
+            $request->routeIs('register') ||
+            $request->is('register') ||
             $request->routeIs('logout') ||
-            $request->is('logout') ||     // <--- TAMBAHAN: Izinkan URL /logout
+            $request->is('logout') ||
             $request->is('livewire/*') ||
             $request->is('flux/*') ||
             $request->is('auth/google*')
         ) {
-
             return $next($request);
         }
 
-        // B. Jika User SUDAH Login DAN dia Superadmin, boleh lewat
         if (Auth::check() && Auth::user()->role === 'superadmin') {
             return $next($request);
         }
 
-        // 3. Jika bukan siapa-siapa, TAMPILKAN HALAMAN MAINTENANCE
-        return response()->view('errors.maintenance', [], 503);
+        return response()->view('errors.maintenance', [], Response::HTTP_SERVICE_UNAVAILABLE); // Menggunakan konstanta 503
     }
 }
