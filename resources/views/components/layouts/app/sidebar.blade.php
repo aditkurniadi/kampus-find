@@ -15,6 +15,7 @@
 
         <flux:navlist variant="outline">
 
+            {{-- 1. DASHBOARD (Umum) --}}
             @can('is-all')
                 <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
                     wire:navigate>
@@ -22,10 +23,28 @@
                 </flux:navlist.item>
             @endcan
 
-            <flux:separator class="my-2" />
+            {{-- 2. GROUP: MAHASISWA (Personal) --}}
+            @can('is-mahasiswa')
+                <flux:separator class="my-2" />
 
+                <flux:navlist.group :heading="__('Aktivitas Saya')" class="grid">
+                    <flux:navlist.item icon="document-text" :href="route('reportMhs')"
+                        :current="request()->routeIs('reportMhs')" wire:navigate>
+                        {{ __('Laporan Penemuan') }}
+                    </flux:navlist.item>
+
+                    <flux:navlist.item icon="question-mark-circle" :href="route('myLostItems')"
+                        :current="request()->routeIs('myLostItems')" wire:navigate>
+                        {{ __('Laporan Kehilangan') }}
+                    </flux:navlist.item>
+                </flux:navlist.group>
+            @endcan
+
+            {{-- 3. GROUP: OPERASIONAL (Keamanan & Superadmin) --}}
             @can('is-keamanan-superadmin')
-                <flux:navlist.group :heading="__('Operasional')" class="grid">
+                <flux:separator class="my-2" />
+
+                <flux:navlist.group :heading="__('Panel Operasional')" class="grid">
                     <flux:navlist.item icon="archive-box" :href="route('foundItems')"
                         :current="request()->routeIs('foundItems')" wire:navigate>
                         {{ __('Data Barang') }}
@@ -48,24 +67,7 @@
                 </flux:navlist.group>
             @endcan
 
-            @can('is-mahasiswa')
-                @can('is-keamanan-superadmin')
-                    <flux:separator class="my-2" />
-                @endcan
-
-                <flux:navlist.group :heading="__('Aktivitas Saya')" class="grid">
-                    <flux:navlist.item icon="document-text" :href="route('reportMhs')"
-                        :current="request()->routeIs('reportMhs')" wire:navigate>
-                        {{ __('Laporan Penemuan') }}
-                    </flux:navlist.item>
-
-                    <flux:navlist.item icon="question-mark-circle" :href="route('myLostItems')"
-                        :current="request()->routeIs('myLostItems')" wire:navigate>
-                        {{ __('Laporan Kehilangan') }}
-                    </flux:navlist.item>
-                </flux:navlist.group>
-            @endcan
-
+            {{-- 4. GROUP: SYSTEM & SETTINGS (Superadmin Only) --}}
             @can('is-superadmin')
                 <flux:separator class="my-2" />
 
@@ -80,7 +82,7 @@
                         {{ __('Kategori Barang') }}
                     </flux:navlist.item>
 
-                    <flux:navlist.item icon="tag" :href="route('admin.settings.images')"
+                    <flux:navlist.item icon="computer-desktop" :href="route('admin.settings.images')"
                         :current="request()->routeIs('admin.settings.images')" wire:navigate>
                         {{ __('Setting Website') }}
                     </flux:navlist.item>
@@ -93,10 +95,8 @@
             @endcan
 
         </flux:navlist>
-
         <flux:spacer />
 
-        <!-- Desktop User Menu -->
         <flux:dropdown class="hidden lg:block" position="bottom" align="start">
             <flux:profile :name="auth()->user()->name" :initials="auth()->user()->initials()"
                 icon:trailing="chevrons-up-down" />
@@ -139,7 +139,6 @@
         </flux:dropdown>
     </flux:sidebar>
 
-    <!-- Mobile User Menu -->
     <flux:header class="lg:hidden">
         <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
@@ -193,9 +192,7 @@
     @livewireScripts
     @if (session('toast'))
         <script>
-            // Kirim event 'show-toast' yang akan ditangkap oleh komponen toast Anda
             document.addEventListener('livewire:navigated', () => {
-                // Kita gunakan timeout kecil agar Livewire siap
                 setTimeout(() => {
                     Livewire.dispatch('show-toast', {
                         type: '{{ session('toast')['type'] }}',
@@ -204,7 +201,7 @@
                 }, 100);
             }, {
                 once: true
-            }); // 'once: true' agar hanya berjalan sekali
+            });
         </script>
     @endif
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
