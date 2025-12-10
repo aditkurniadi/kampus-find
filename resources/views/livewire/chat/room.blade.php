@@ -1,4 +1,4 @@
-<div class="flex flex-col w-full h-[calc(100vh-5rem)] bg-gray-50 dark:bg-zinc-900 rounded-xl overflow-hidden shadow-lg border border-gray-200 dark:border-zinc-800"
+<div class="flex flex-col w-full h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)] relative bg-gray-50 dark:bg-zinc-900 rounded-xl overflow-hidden shadow-lg border border-gray-200 dark:border-zinc-800"
     x-data="{ showImageModal: false, selectedImage: '' }">
 
     {{-- ========================================== --}}
