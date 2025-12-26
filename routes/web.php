@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Inbox;
 use App\Livewire\Users;
 use App\Models\Feedback;
 use App\Livewire\Kategori;
@@ -90,6 +91,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/chat/{id}', App\Livewire\Chat\Room::class)->name('chat.room');
 
     Route::get('/admin/settings/images', \App\Livewire\Admin\SiteSettings::class)->name('admin.settings.images')->middleware('can:is-superadmin');
+    Route::get('/inbox', \App\Livewire\Inbox::class)->name('inbox')->can('is-all');
 });
 
 Route::middleware(['auth', 'can:is-mahasiswa'])->group(function () {

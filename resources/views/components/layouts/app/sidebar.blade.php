@@ -21,6 +21,25 @@
                     wire:navigate>
                     {{ __('Dashboard') }}
                 </flux:navlist.item>
+
+                <flux:navlist.item icon="inbox" :href="route('inbox')" :current="request()->routeIs('inbox')"
+                    wire:navigate class="hidden lg:flex justify-between items-center w-full">
+                    <div class="flex items-center w-full justify-between">
+                        <span>{{ __('Kotak Masuk') }}</span>
+
+                        {{-- Badge Desktop (Hanya muncul di Laptop) --}}
+                        @php
+                            $unread = \App\Models\Notification::where('user_id', auth()->id())
+                                ->where('is_read', false)
+                                ->count();
+                        @endphp
+                        @if ($unread > 0)
+                            <span class="ml-auto bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                                {{ $unread > 9 ? '9+' : $unread }}
+                            </span>
+                        @endif
+                    </div>
+                </flux:navlist.item>
             @endcan
 
             {{-- 2. GROUP: MAHASISWA (Personal) --}}
@@ -114,6 +133,38 @@
 
                             <div class="grid flex-1 text-start text-sm leading-tight">
                                 <span class="truncate font-semibold">{{ auth()->user()->name }}</span>
+                                {{-- === MULAI KODE BADGE === --}}
+                                @php
+                                    $pts = auth()->user()->trust_points ?? 0;
+                                    $badge = 'Warga Baru';
+                                    // Tambahkan dark mode style
+                                    $color = 'bg-gray-100 text-gray-600 dark:bg-zinc-700 dark:text-gray-300';
+
+                                    if ($pts >= 50) {
+                                        $badge = 'Teman Baik';
+                                        $color = 'bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-300';
+                                    }
+                                    if ($pts >= 100) {
+                                        $badge = 'Pahlawan Kampus';
+                                        $color =
+                                            'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-300';
+                                    }
+                                    if ($pts >= 200) {
+                                        $badge = 'Legend';
+                                        $color =
+                                            'bg-purple-100 text-purple-600 dark:bg-purple-900/50 dark:text-purple-300';
+                                    }
+                                @endphp
+
+                                <div class="flex items-center gap-2 mt-1 mb-0.5">
+                                    <span
+                                        class="text-[10px] font-bold text-yellow-600 dark:text-yellow-400 flex items-center gap-0.5">
+                                        ⭐ {{ $pts }}
+                                    </span>
+                                    <span class="text-[10px] px-1.5 py-0.5 rounded-md font-medium {{ $color }}">
+                                        {{ $badge }}
+                                    </span>
+                                </div>
                                 <span class="truncate text-xs">{{ auth()->user()->email }}</span>
                             </div>
                         </div>
@@ -144,6 +195,10 @@
 
         <flux:spacer />
 
+        <div class="">
+            @livewire('notification-bell')
+        </div>
+
         <flux:dropdown position="top" align="end">
             <flux:profile :initials="auth()->user()->initials()" icon-trailing="chevron-down" />
 
@@ -160,6 +215,38 @@
 
                             <div class="grid flex-1 text-start text-sm leading-tight">
                                 <span class="truncate font-semibold">{{ auth()->user()->name }}</span>
+                                {{-- === MULAI KODE BADGE === --}}
+                                @php
+                                    $pts = auth()->user()->trust_points ?? 0;
+                                    $badge = 'Warga Baru';
+                                    // Tambahkan dark mode style
+                                    $color = 'bg-gray-100 text-gray-600 dark:bg-zinc-700 dark:text-gray-300';
+
+                                    if ($pts >= 50) {
+                                        $badge = 'Teman Baik';
+                                        $color = 'bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-300';
+                                    }
+                                    if ($pts >= 100) {
+                                        $badge = 'Pahlawan Kampus';
+                                        $color =
+                                            'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-300';
+                                    }
+                                    if ($pts >= 200) {
+                                        $badge = 'Legend';
+                                        $color =
+                                            'bg-purple-100 text-purple-600 dark:bg-purple-900/50 dark:text-purple-300';
+                                    }
+                                @endphp
+
+                                <div class="flex items-center gap-2 mt-1 mb-0.5">
+                                    <span
+                                        class="text-[10px] font-bold text-yellow-600 dark:text-yellow-400 flex items-center gap-0.5">
+                                        ⭐ {{ $pts }}
+                                    </span>
+                                    <span class="text-[10px] px-1.5 py-0.5 rounded-md font-medium {{ $color }}">
+                                        {{ $badge }}
+                                    </span>
+                                </div>
                                 <span class="truncate text-xs">{{ auth()->user()->email }}</span>
                             </div>
                         </div>
