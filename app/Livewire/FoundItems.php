@@ -9,8 +9,7 @@ use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth; // <-- Tambahkan ini
-use Livewire\Attributes\On; // <-- Dan tambahkan ini
+use App\Models\Notification; // <-- Dan tambahkan ini
 
 class FoundItems extends Component
 {
@@ -204,25 +203,51 @@ class FoundItems extends Component
 
     public function markAsCompleted()
     {
-        // Validasi input
+        // 1. Validasi input (data pengambil barang)
         $this->validate([
-            'taken_by_name' => 'required|string|max:255',
-            'taken_by_npm' => 'required|string|max:20',
+            'taken_by_name'  => 'required|string|max:255',
+            'taken_by_npm'   => 'required|string|max:20',
             'taken_by_phone' => 'required|string|max:20',
         ]);
 
+        // 2. Cari barang berdasarkan ID
         $item = found_items::find($this->selectedItemId);
 
         if ($item) {
+            // 3. Update data barang menjadi 'selesai' dan simpan data pengambil
             $item->update([
-                'status' => 'selesai',
-                'taken_by_name' => $this->taken_by_name,
-                'taken_by_npm' => $this->taken_by_npm,
+                'status'         => 'selesai',
+                'taken_by_name'  => $this->taken_by_name,
+                'taken_by_npm'   => $this->taken_by_npm,
                 'taken_by_phone' => $this->taken_by_phone,
-                // Opsional: 'taken_at' => now(), jika ada kolom tanggal pengambilan
             ]);
 
-            $this->dispatch('show-toast', type: 'success', message: 'Barang berhasil diperbarui!.');
+            // ============================================================
+            // MULAI LOGIKA REWARD & INBOX
+            // ============================================================
+
+            // Ambil data user yang melaporkan barang (Pelapor)
+            // Pastikan di Model found_items sudah ada fungsi: public function user() { return $this->belongsTo(User::class); }
+            $pelapor = $item->user;
+
+            if ($pelapor) {
+                // A. Tambahkan Poin Kepercayaan (+10 Poin)
+                $pelapor->increment('trust_points', 10);
+
+                // B. Kirim Notifikasi ke Inbox Pelapor
+                Notification::create([
+                    'user_id' => $pelapor->id,
+                    'title'   => '🎉 Terima Kasih! +10 Poin Untukmu',
+                    'message' => "Halo {$pelapor->name}, barang temuan '{$item->name}' telah berhasil diambil oleh pemiliknya ({$this->taken_by_name}). Terima kasih atas kejujuran Anda!",
+                    'type'    => 'reward', // Tipe reward agar bisa dikasih style khusus (warna emas/kuning)
+                    'is_read' => false,
+                ]);
+            }
+            // ============================================================
+            // SELESAI LOGIKA REWARD
+            // ============================================================
+
+            $this->dispatch('show-toast', type: 'success', message: 'Barang berhasil diselesaikan & Reward dikirim ke pelapor.');
         }
 
         $this->closeModal();
